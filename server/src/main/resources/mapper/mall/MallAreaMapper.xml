@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.mall.MallAreaMapper">
+    <resultMap id="mallArea" type="com.arc.core.model.domain.mall.MallArea">
+        <id property="id" column="mall_area_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="areaCode" column="mall_area_area_code" javaType="long" jdbcType="BIGINT"/>
+        <result property="shortCode" column="mall_area_short_code" javaType="string" jdbcType="VARCHAR"/>
+        <result property="areaName" column="mall_area_area_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="tag" column="mall_area_tag" javaType="string" jdbcType="VARCHAR"/>
+        <result property="note" column="mall_area_note" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="sqlMallAreaColumns">
+		mall_area_.id AS mall_area_id,
+		mall_area_.area_code AS mall_area_area_code,
+		mall_area_.short_code AS mall_area_short_code,
+		mall_area_.area_name AS mall_area_area_name,
+		mall_area_.tag AS mall_area_tag,
+		mall_area_.note AS mall_area_note
+	</sql>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM  t_mall_area
+        WHERE  id = #{id,jdbcType=BIGINT}
+
+    </delete>
+
+    <select id="get" parameterType="long" resultMap="mallArea">
+        SELECT
+        <include refid="sqlMallAreaColumns"/>
+        FROM t_mall_area mall_area_
+        WHERE mall_area_.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="list" resultMap="mallArea">
+        SELECT
+        <include refid="sqlMallAreaColumns"/>
+        FROM t_mall_area mall_area_
+    </select>
+
+    <insert id="save" parameterType="com.arc.core.model.domain.mall.MallArea" useGeneratedKeys="true"
+            keyProperty="id">
+		INSERT INTO t_mall_area (
+			area_code,
+			short_code,
+			area_name,
+			tag,
+			note
+		)
+        VALUES (
+			#{areaCode,jdbcType=BIGINT},
+			#{shortCode,jdbcType=VARCHAR},
+			#{areaName,jdbcType=VARCHAR},
+			#{tag,jdbcType=VARCHAR},
+			#{note,jdbcType=VARCHAR}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.arc.core.model.domain.mall.MallArea">
+        UPDATE t_mall_area
+        <set>
+            <if test="areaCode != null">area_code = #{areaCode,jdbcType=BIGINT},</if>
+            <if test="shortCode != null and shortCode != ''">short_code = #{shortCode,jdbcType=VARCHAR},</if>
+            <if test="areaName != null and areaName != ''">area_name = #{areaName,jdbcType=VARCHAR},</if>
+            <if test="tag != null and tag != ''">tag = #{tag,jdbcType=VARCHAR},</if>
+            <if test="note != null and note != ''">note = #{note,jdbcType=VARCHAR},</if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

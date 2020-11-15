@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<html data-n-head-ssr>
+<head >
+    <title>面试必备：Java线程池解析</title>
+</head>
+<body >
+<div data-server-rendered="true" id="__nuxt"><div id="__layout"><div id="juejin"><div class="global-component-box"><!----> <!----> <!----> <!----> <!----> <div class="emoji-barrage" data-v-68506677><!----></div> <!----> <!----> <div class="bind-phone-number-modal-box" data-v-dc3eac6a><div st:block="bindPhoneNumberModal" class="modal-mask" style="display:none;" data-v-dc3eac6a data-v-dc3eac6a></div> <form class="bind-phone-number-form" style="display:none;" data-v-dc3eac6a data-v-dc3eac6a><i title="关闭" class="close-btn ion-close-round" data-v-dc3eac6a></i> <h1 class="title" data-v-dc3eac6a>提示</h1> <h2 class="hint" data-v-dc3eac6a>根据我国<a href="http://www.cac.gov.cn/2016-11/07/c_1119867116.htm" target="_blank" style="color:#007fff">《网络安全法》</a>，您需要绑定手机号后才可在掘金社区内发布内容。</h2> <div class="input-group" data-v-dc3eac6a><div class="input-box dropdown-box" data-v-dc3eac6a><div class="dropdown-input-container" style="width:26%;" data-v-4e5eda86 data-v-dc3eac6a><div class="dropdown-input-box" data-v-4e5eda86><input autocomplete="off" value="86" data-v-4e5eda86> <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMiIgaGVpZ2h0PSIxMiIgdmlld0JveD0iMCAwIDEyIDEyIj4KICAgIDxwYXRoIGZpbGw9IiM5OTkiIGZpbGwtcnVsZT0ibm9uemVybyIgZD0iTTYgNy42NTlsMy4xNDYtMy40OTZhLjQ2NS40NjUgMCAwIDEgLjcwOCAwIC42LjYgMCAwIDEgMCAuNzg1bC0zLjUgMy44OWEuNDY1LjQ2NSAwIDAgMS0uNzA4IDBsLTMuNS0zLjg5YS42LjYgMCAwIDEgMC0uNzg1LjQ2NS40NjUgMCAwIDEgLjcwOCAwTDYgNy42NTl6Ii8+Cjwvc3ZnPg==" class="arrow" style="transform:rotate(0deg);" data-v-4e5eda86></div> <div class="dropdown-pannel" style="display:none;" data-v-4e5eda86 data-v-4e5eda86><ul data-v-4e5eda86><li class="item selected" data-v-4e5eda86><span data-v-4e5eda86>中国</span> <span data-v-4e5eda86>+86</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>中国澳门</span> <span data-v-4e5eda86>+853</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>中国台湾</span> <span data-v-4e5eda86>+886</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>中国香港</span> <span data-v-4e5eda86>+852</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿尔巴尼亚</span> <span data-v-4e5eda86>+355</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿尔及利亚</span> <span data-v-4e5eda86>+213</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿富汗</span> <span data-v-4e5eda86>+93</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿根廷</span> <span data-v-4e5eda86>+54</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿拉伯联合酋长国</span> <span data-v-4e5eda86>+971</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿鲁巴岛</span> <span data-v-4e5eda86>+297</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿曼</span> <span data-v-4e5eda86>+968</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿塞拜疆</span> <span data-v-4e5eda86>+994</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>阿森松</span> <span data-v-4e5eda86>+247</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>埃及</span> <span data-v-4e5eda86>+20</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>埃塞俄比亚</span> <span data-v-4e5eda86>+251</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>爱尔兰</span> <span data-v-4e5eda86>+353</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>爱沙尼亚</span> <span data-v-4e5eda86>+372</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>安道尔</span> <span data-v-4e5eda86>+376</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>安哥拉</span> <span data-v-4e5eda86>+244</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>安圭拉</span> <span data-v-4e5eda86>+1264</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>安提瓜和巴布达</span> <span data-v-4e5eda86>+1268</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>奥地利</span> <span data-v-4e5eda86>+43</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>奥兰群岛</span> <span data-v-4e5eda86>+358</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>澳大利亚</span> <span data-v-4e5eda86>+61</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>巴巴多斯</span> <span data-v-4e5eda86>+1246</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>巴哈马</span> <span data-v-4e5eda86>+1242</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>巴基斯坦</span> <span data-v-4e5eda86>+92</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>巴拉圭</span> <span data-v-4e5eda86>+595</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>巴勒斯坦</span> <span data-v-4e5eda86>+970</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>巴林</span> <span data-v-4e5eda86>+973</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>巴拿马</span> <span data-v-4e5eda86>+507</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>巴西</span> <span data-v-4e5eda86>+55</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>白俄罗斯</span> <span data-v-4e5eda86>+375</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>百慕大</span> <span data-v-4e5eda86>+1441</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>保加利亚</span> <span data-v-4e5eda86>+359</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>北马里亚纳群岛</span> <span data-v-4e5eda86>+1670</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>贝宁</span> <span data-v-4e5eda86>+229</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>比利时</span> <span data-v-4e5eda86>+32</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>冰岛</span> <span data-v-4e5eda86>+354</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>波多黎各</span> <span data-v-4e5eda86>+1787</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>波黑</span> <span data-v-4e5eda86>+387</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>波兰</span> <span data-v-4e5eda86>+48</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>玻利维亚</span> <span data-v-4e5eda86>+591</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>伯利兹</span> <span data-v-4e5eda86>+501</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>博茨瓦纳</span> <span data-v-4e5eda86>+267</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>不丹</span> <span data-v-4e5eda86>+975</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>布基拉法索</span> <span data-v-4e5eda86>+226</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>布隆迪</span> <span data-v-4e5eda86>+257</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>朝鲜</span> <span data-v-4e5eda86>+850</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>赤道几内亚</span> <span data-v-4e5eda86>+240</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>丹麦</span> <span data-v-4e5eda86>+45</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>德国</span> <span data-v-4e5eda86>+49</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>多哥</span> <span data-v-4e5eda86>+228</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>多米尼加共和国</span> <span data-v-4e5eda86>+1809</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>多米尼克</span> <span data-v-4e5eda86>+1767</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>俄罗斯</span> <span data-v-4e5eda86>+7</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>厄瓜多尔</span> <span data-v-4e5eda86>+593</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>厄立特里亚</span> <span data-v-4e5eda86>+291</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>法国</span> <span data-v-4e5eda86>+33</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>法罗群岛</span> <span data-v-4e5eda86>+298</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>法属波利尼西亚</span> <span data-v-4e5eda86>+689</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>法属圭亚那</span> <span data-v-4e5eda86>+594</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>梵蒂冈</span> <span data-v-4e5eda86>+379</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>菲律宾</span> <span data-v-4e5eda86>+63</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>斐济</span> <span data-v-4e5eda86>+679</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>芬兰</span> <span data-v-4e5eda86>+358</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>佛得角</span> <span data-v-4e5eda86>+238</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>冈比亚</span> <span data-v-4e5eda86>+220</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>刚果</span> <span data-v-4e5eda86>+242</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>刚果民主共和国</span> <span data-v-4e5eda86>+243</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>哥伦比亚</span> <span data-v-4e5eda86>+57</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>哥斯达黎加</span> <span data-v-4e5eda86>+506</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>格林纳达</span> <span data-v-4e5eda86>+1473</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>格陵兰岛</span> <span data-v-4e5eda86>+299</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>格鲁吉亚</span> <span data-v-4e5eda86>+995</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>瓜德罗普</span> <span data-v-4e5eda86>+590</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>关岛</span> <span data-v-4e5eda86>+1671</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>圭亚那</span> <span data-v-4e5eda86>+592</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>海地</span> <span data-v-4e5eda86>+509</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>韩国</span> <span data-v-4e5eda86>+82</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>荷兰</span> <span data-v-4e5eda86>+31</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>荷属安的列斯</span> <span data-v-4e5eda86>+599</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>洪都拉斯</span> <span data-v-4e5eda86>+504</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>吉布提</span> <span data-v-4e5eda86>+253</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>加拿大</span> <span data-v-4e5eda86>+1</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>吉尔吉斯斯坦</span> <span data-v-4e5eda86>+996</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>几内亚</span> <span data-v-4e5eda86>+224</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>加那利群岛</span> <span data-v-4e5eda86>+3491</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>加纳</span> <span data-v-4e5eda86>+233</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>加蓬</span> <span data-v-4e5eda86>+241</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>柬埔寨</span> <span data-v-4e5eda86>+855</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>捷克</span> <span data-v-4e5eda86>+420</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>喀麦隆</span> <span data-v-4e5eda86>+237</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>卡塔尔</span> <span data-v-4e5eda86>+974</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>开曼群岛</span> <span data-v-4e5eda86>+1345</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>科摩罗</span> <span data-v-4e5eda86>+269</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>科索沃</span> <span data-v-4e5eda86>+883</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>科特迪瓦</span> <span data-v-4e5eda86>+225</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>科威特</span> <span data-v-4e5eda86>+965</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>克罗地亚</span> <span data-v-4e5eda86>+385</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>肯尼亚</span> <span data-v-4e5eda86>+254</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>拉脱维亚</span> <span data-v-4e5eda86>+371</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>莱索托</span> <span data-v-4e5eda86>+266</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>老挝</span> <span data-v-4e5eda86>+856</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>黎巴嫩</span> <span data-v-4e5eda86>+961</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>立陶宛</span> <span data-v-4e5eda86>+370</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>利比里亚</span> <span data-v-4e5eda86>+231</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>利比亚</span> <span data-v-4e5eda86>+218</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>列支敦士登</span> <span data-v-4e5eda86>+423</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>留尼旺岛</span> <span data-v-4e5eda86>+262</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>卢森堡</span> <span data-v-4e5eda86>+352</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>卢旺达</span> <span data-v-4e5eda86>+250</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>罗马尼亚</span> <span data-v-4e5eda86>+40</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马达加斯加</span> <span data-v-4e5eda86>+261</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马尔代夫</span> <span data-v-4e5eda86>+960</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马耳他</span> <span data-v-4e5eda86>+356</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马拉维</span> <span data-v-4e5eda86>+265</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马来西亚</span> <span data-v-4e5eda86>+60</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马里</span> <span data-v-4e5eda86>+223</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马其顿</span> <span data-v-4e5eda86>+389</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马绍尔群岛</span> <span data-v-4e5eda86>+692</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马提尼克</span> <span data-v-4e5eda86>+596</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>马约特</span> <span data-v-4e5eda86>+262</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>毛里求斯</span> <span data-v-4e5eda86>+230</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>毛里塔尼亚</span> <span data-v-4e5eda86>+222</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>美国</span> <span data-v-4e5eda86>+1</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>美属萨摩亚</span> <span data-v-4e5eda86>+1684</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>美属维尔京群岛</span> <span data-v-4e5eda86>+1340</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>蒙古</span> <span data-v-4e5eda86>+976</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>蒙塞拉特岛</span> <span data-v-4e5eda86>+1664</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>蒙特內哥羅</span> <span data-v-4e5eda86>+382</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>孟加拉国</span> <span data-v-4e5eda86>+880</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>秘鲁</span> <span data-v-4e5eda86>+51</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>密克罗尼西亚联邦</span> <span data-v-4e5eda86>+691</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>缅甸</span> <span data-v-4e5eda86>+95</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>摩尔多瓦</span> <span data-v-4e5eda86>+373</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>摩洛哥</span> <span data-v-4e5eda86>+212</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>摩纳哥</span> <span data-v-4e5eda86>+377</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>莫桑比克</span> <span data-v-4e5eda86>+258</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>墨西哥</span> <span data-v-4e5eda86>+52</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>纳米比亚</span> <span data-v-4e5eda86>+264</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>南非</span> <span data-v-4e5eda86>+27</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>尼泊尔</span> <span data-v-4e5eda86>+977</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>尼加拉瓜</span> <span data-v-4e5eda86>+505</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>尼日尔</span> <span data-v-4e5eda86>+227</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>尼日利亚</span> <span data-v-4e5eda86>+234</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>挪威</span> <span data-v-4e5eda86>+47</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>帕劳</span> <span data-v-4e5eda86>+680</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>葡萄牙</span> <span data-v-4e5eda86>+351</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>千里达及托巴哥</span> <span data-v-4e5eda86>+1868</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>日本</span> <span data-v-4e5eda86>+81</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>瑞典</span> <span data-v-4e5eda86>+46</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>瑞士</span> <span data-v-4e5eda86>+41</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>圣诞岛</span> <span data-v-4e5eda86>+61</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>圣基茨和尼维斯</span> <span data-v-4e5eda86>+1869</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>圣卢西亚</span> <span data-v-4e5eda86>+1758</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>圣马力诺</span> <span data-v-4e5eda86>+223</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>圣马力诺</span> <span data-v-4e5eda86>+378</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>圣皮埃尔和密克隆群岛</span> <span data-v-4e5eda86>+508</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>圣文森特和格林纳丁斯</span> <span data-v-4e5eda86>+1784</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>斯里兰卡</span> <span data-v-4e5eda86>+94</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>斯洛伐克</span> <span data-v-4e5eda86>+421</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>斯洛文尼亚</span> <span data-v-4e5eda86>+386</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>斯威士兰</span> <span data-v-4e5eda86>+268</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>苏丹</span> <span data-v-4e5eda86>+249</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>苏里南</span> <span data-v-4e5eda86>+597</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>索马里</span> <span data-v-4e5eda86>+252</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>塔吉克斯坦</span> <span data-v-4e5eda86>+992</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>沙特阿拉伯</span> <span data-v-4e5eda86>+966</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>塞舌尔</span> <span data-v-4e5eda86>+248</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>塞浦路斯</span> <span data-v-4e5eda86>+357</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>塞内加尔</span> <span data-v-4e5eda86>+221</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>塞拉利昂</span> <span data-v-4e5eda86>+232</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>塞尔维亚</span> <span data-v-4e5eda86>+381</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>萨尔瓦多</span> <span data-v-4e5eda86>+503</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>萨尔瓦多</span> <span data-v-4e5eda86>+503</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>汤加</span> <span data-v-4e5eda86>+676</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>坦桑尼亚</span> <span data-v-4e5eda86>+255</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>泰国</span> <span data-v-4e5eda86>+66</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>特克斯和凯科斯群岛</span> <span data-v-4e5eda86>+1649</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>突尼斯</span> <span data-v-4e5eda86>+216</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>图瓦卢</span> <span data-v-4e5eda86>+688</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>土耳其</span> <span data-v-4e5eda86>+90</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>土库曼斯坦</span> <span data-v-4e5eda86>+993</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>乌兹别克斯坦</span> <span data-v-4e5eda86>+998</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>乌拉圭</span> <span data-v-4e5eda86>+598</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>乌克兰</span> <span data-v-4e5eda86>+380</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>乌干达</span> <span data-v-4e5eda86>+256</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>文莱</span> <span data-v-4e5eda86>+673</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>委内瑞拉</span> <span data-v-4e5eda86>+58</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>危地马拉</span> <span data-v-4e5eda86>+502</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>叙利亚</span> <span data-v-4e5eda86>+963</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>匈牙利</span> <span data-v-4e5eda86>+36</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>新西兰</span> <span data-v-4e5eda86>+64</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>新喀里多尼亚</span> <span data-v-4e5eda86>+687</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>新加坡</span> <span data-v-4e5eda86>+65</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>希腊</span> <span data-v-4e5eda86>+30</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>西萨摩亚</span> <span data-v-4e5eda86>+685</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>西撒哈拉</span> <span data-v-4e5eda86>+212</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>西班牙</span> <span data-v-4e5eda86>+34</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>越南</span> <span data-v-4e5eda86>+84</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>约旦</span> <span data-v-4e5eda86>+962</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>英属维尔京群岛</span> <span data-v-4e5eda86>+1284</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>英国</span> <span data-v-4e5eda86>+44</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>印度尼西亚</span> <span data-v-4e5eda86>+62</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>印度</span> <span data-v-4e5eda86>+91</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>意大利</span> <span data-v-4e5eda86>+39</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>以色列</span> <span data-v-4e5eda86>+972</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>伊朗</span> <span data-v-4e5eda86>+98</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>伊拉克</span> <span data-v-4e5eda86>+964</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>也门</span> <span data-v-4e5eda86>+967</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>亚美尼亚</span> <span data-v-4e5eda86>+374</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>牙买加</span> <span data-v-4e5eda86>+1876</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>中非</span> <span data-v-4e5eda86>+236</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>智利</span> <span data-v-4e5eda86>+56</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>直布罗陀</span> <span data-v-4e5eda86>+350</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>乍得</span> <span data-v-4e5eda86>+235</span></li><li class="item" data-v-4e5eda86><span data-v-4e5eda86>赞比亚</span> <span data-v-4e5eda86>+260</span></li></ul></div></div> <input maxlength="11" placeholder="请输入要绑定的手机号码" value="" class="input number-input" data-v-dc3eac6a></div> <div class="input-box vcode-box" data-v-dc3eac6a></div> <div class="input-box" data-v-dc3eac6a><input maxlength="4" placeholder="验证码" value="" class="input" data-v-dc3eac6a> <button class="send-vcode-btn" data-v-dc3eac6a>
+    获取验证码
+</button></div></div> <button st:name="bindBtn" class="btn" data-v-dc3eac6a>
+    绑定手机
+</button></form></div> <!----></div> <!----> <div class="view-container" data-v-6a3e47cf data-v-064b8453><div class="main-header-box" data-v-6a3e47cf><header class="main-header main-header unauthorized visible" data-v-20709686 data-v-6a3e47cf><div class="container" data-v-20709686><a href="/" class="logo" data-v-20709686><img src="//s3.pstatp.com/toutiao/xitu_juejin_web/img/logo.a7995ad.svg" alt="掘金" class="logo-img" data-v-20709686> <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiIHN0YW5kYWxvbmU9Im5vIj8+Cjxzdmcgd2lkdGg9IjQ1cHgiIGhlaWdodD0iMzhweCIgdmlld0JveD0iMCAwIDQ1IDM4IiB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiPgogICAgPHRpdGxlPkp1ZWppbjwvdGl0bGU+CiAgICA8ZGVzYz5KdWVqaW4uaW08L2Rlc2M+CiAgICA8ZGVmcz48L2RlZnM+CiAgICA8ZyBpZD0iMC4xIiBzdHJva2U9Im5vbmUiIHN0cm9rZS13aWR0aD0iMSIgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj4KICAgICAgICA8ZyBpZD0iR3JvdXAtMTQiIHRyYW5zZm9ybT0idHJhbnNsYXRlKDEuMDAwMDAwLCA1LjAwMDAwMCkiIGZpbGw9IiMwMDZDRkYiPgogICAgICAgICAgICA8cGF0aCBkPSJNMjEuMjkzNDMyOCwyLjU4MzEzMDQ5IEwxOC4wMTczOTg0LDAgTDE0LjU5NDYyNCwyLjY5ODg3ODAxIEwxNC40MTcyMDc3LDIuODQxODIzMDQgTDE4LjAxNzM5ODQsNS43MTI0MjQ4MyBMMjEuNjI4NjU3OCwyLjg0MTgyMzA0IEwyMS4yOTM0MzI4LDIuNTgzMTMwNDkgWiBNMzMuNzA3ODI4OSwxMi42MDA2Njc0IEwxOC4wMDc5MTA5LDI0Ljk4MDI3NiBMMi4zMTc0ODA0NCwxMi42MDgyNTc0IEwwLDE0LjQ2OTcwNTIgTDE4LjAwNzkxMDksMjguNjY5MDE2NyBMMzYuMDI1NjI1NiwxNC40NjIxMTUyIEwzMy43MDc4Mjg5LDEyLjYwMDY2NzQgWiBNMTguMDA3OTEwOSwxMy42MDUwNzc2IEw5LjQ2NDQxNTU0LDYuODY4NjM1MDUgTDcuMTQ2NjE4ODUsOC43MzAwODI5IEwxOC4wMDc5MTA5LDE3LjI5NDEzNDUgTDI4Ljg3ODM3NDIsOC43MjI0OTI5IEwyNi41NjA1Nzc1LDYuODYxMDQ1MDUgTDE4LjAwNzkxMDksMTMuNjA1MDc3NiBaIiBpZD0iRmlsbC0xLUNvcHkiPjwvcGF0aD4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPg==" alt="掘金" class="mobile" data-v-20709686></a> <nav role="navigation" class="main-nav" data-v-20709686><ul class="nav-list" data-v-20709686><li class="main-nav-list" data-v-20709686><div class="phone-show-menu" data-v-20709686><span data-v-20709686>首页</span> <div class="icon ion-arrow-down-b" data-v-20709686></div></div> <ul class="phone-hide" data-v-20709686><li class="nav-item link-item route-active" data-v-20709686><a href="/" data-v-20709686>首页</a></li> <li class="nav-item link-item activities" data-v-20709686><a href="/pins" data-v-20709686>沸点</a></li> <li class="nav-item link-item" data-v-20709686><a href="/topics" data-v-20709686>话题</a></li> <li class="nav-item link-item book" data-v-20709686><a href="/books" data-v-20709686>小册</a></li> <li class="nav-item link-item" data-v-20709686><a href="/events/all" data-v-20709686>活动</a></li></ul></li> <li class="nav-item search" data-v-20709686><form role="search" class="search-form" data-v-20709686><input type="search" maxlength="32" placeholder="探索掘金" value="" class="search-input" data-v-20709686> <img src="//s3.pstatp.com/toutiao/xitu_juejin_web/img/juejin-search-icon.6f8ba1b.svg" alt="搜索" class="search-icon" data-v-20709686></form></li> <li class="nav-item add" data-v-20709686><div class="add-group" data-v-20709686><button class="add-btn" data-v-20709686>写文章</button> <div class="more" data-v-20709686><i class="more-icon ion-android-arrow-dropdown" data-v-20709686></i></div> <ul class="more-list" data-v-20709686><li class="item" data-v-20709686>发布沸点</li> <!----></ul></div> <!----></li> <!----> <!----> <li class="nav-item auth" data-v-20709686><button class="login-button" data-v-20709686>登录</button></li></ul></nav></div></header></div>  <main class="container main-container" style="max-width:;" data-v-6a3e47cf><div class="view column-view" data-v-6a3e47cf data-v-064b8453><div class="main-area article-area shadow" data-v-6a3e47cf data-v-064b8453><article itemscope="itemscope" itemtype="http://schema.org/Article" data-entry-id="6844903889678893063" data-draft-id="6845076358192709646" class="article" data-v-064b8453><meta itemprop="url" content="https://juejin.im/post/6844903889678893063"> <meta itemprop="headline" content="面试必备：Java线程池解析"> <meta itemprop="keywords" content="Java"> <meta itemprop="datePublished" content="2019-07-15T03:50:37.000Z"> <meta itemprop="image" content="https://b-gold-cdn.xitu.io/icon/icon-128.png"> <div itemprop="author" itemscope="itemscope" itemtype="http://schema.org/Person"><meta itemprop="name" content="Jay_huaxiao"> <meta itemprop="url" content="https://juejin.im/user/1451011080727639"></div> <div itemprop="publisher" itemscope="itemscope" itemtype="http://schema.org/Organization"><meta itemprop="name" content="掘金"> <div itemprop="logo" itemscope="itemscope" itemtype="https://schema.org/ImageObject"><meta itemprop="url" content="https://b-gold-cdn.xitu.io/icon/icon-white-180.png"> <meta itemprop="width" content="180"> <meta itemprop="height" content="180"></div></div> <div class="author-info-block" data-v-064b8453><a href="/user/1451011080727639" target="_blank" rel="" class="avatar-link" data-v-064b8453><div data-src="https://user-gold-cdn.xitu.io/2019/6/17/16b6437ec15b3085?imageView2/1/w/100/h/100/q/85/interlace/1" class="lazy avatar avatar" style="background-image:none;" data-v-47cc2604 data-v-1c418ef0 data-v-064b8453></div></a> <div class="author-info-box" data-v-064b8453><!----> <div class="meta-box" data-v-064b8453><time datetime="2019-07-15T03:50:37.000Z" title="Mon Jul 15 2019 11:50:37 GMT+0800 (China Standard Time)" class="time" data-v-064b8453>
+    2019年07月15日
+</time> <span class="views-count" data-v-064b8453>阅读 36115</span> <!----></div></div> <button class="follow-button follow" data-v-06c7d5b3 data-v-064b8453><span data-v-06c7d5b3>关注</span></button></div> <!----> <h1 class="article-title" data-v-064b8453><!---->
+    面试必备：Java线程池解析
+</h1> <div itemprop="articleBody" class="article-content" data-v-064b8453><div><p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf4399bfe4b7b4?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1280" data-height="800"><figcaption></figcaption></figure><p></p>
+    <h2 class="heading" data-id="heading-0">前言</h2>
+    <p>掌握线程池是后端程序员的基本要求，相信大家求职面试过程中，几乎都会被问到有关于线程池的问题。我在网上搜集了几道经典的线程池面试题，并以此为切入点，谈谈我对线程池的理解。如果有哪里理解不正确，非常希望大家指出，接下来大家一起分析学习吧。</p>
+    <p>github 地址</p>
+    <blockquote>
+        <p><a target="_blank" href="https://github.com/whx123/JavaHome" rel="nofollow noopener noreferrer">github.com/whx123/Java…</a></p>
+    </blockquote>
+    <h2 class="heading" data-id="heading-1">经典面试题</h2>
+    <ul>
+        <li>面试问题1：Java的线程池说一下，各个参数的作用，如何进行的?</li>
+        <li>面试问题2：按线程池内部机制，当提交新任务时，有哪些异常要考虑。</li>
+        <li>面试问题3：线程池都有哪几种工作队列？</li>
+        <li>面试问题4：使用无界队列的线程池会导致内存飙升吗？</li>
+        <li>面试问题5：说说几种常见的线程池及使用场景?</li>
+    </ul>
+    <h2 class="heading" data-id="heading-2">线程池概念</h2>
+    <p><strong>线程池：</strong> 简单理解，它就是一个管理线程的池子。</p>
+    <ul>
+        <li><strong>它帮我们管理线程，避免增加创建线程和销毁线程的资源损耗</strong>。因为线程其实也是一个对象，创建一个对象，需要经过类加载过程，销毁一个对象，需要走GC垃圾回收流程，都是需要资源开销的。</li>
+        <li><strong>提高响应速度。</strong> 如果任务到达了，相对于从线程池拿线程，重新去创建一条线程执行，速度肯定慢很多。</li>
+        <li><strong>重复利用。</strong> 线程用完，再放回池子，可以达到重复利用的效果，节省资源。</li>
+    </ul>
+    <h2 class="heading" data-id="heading-3">线程池的创建</h2>
+    <p>线程池可以通过ThreadPoolExecutor来创建，我们来看一下它的构造函数：</p>
+    <pre><code class="hljs java copyable" lang="java"><span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ThreadPoolExecutor</span><span class="hljs-params">(<span class="hljs-keyword">int</span> corePoolSize, <span class="hljs-keyword">int</span> maximumPoolSize,<span class="hljs-keyword">long</span> keepAliveTime,TimeUnit unit,
+   BlockingQueue&#x3C;Runnable> workQueue,
+   ThreadFactory threadFactory,
+   RejectedExecutionHandler handler)</span>
+</span><span class="copy-code-btn">复制代码</span></code></pre><p>几个核心参数的作用：</p>
+    <ul>
+        <li><strong>corePoolSize：</strong> 线程池核心线程数最大值</li>
+        <li><strong>maximumPoolSize：</strong> 线程池最大线程数大小</li>
+        <li><strong>keepAliveTime：</strong> 线程池中非核心线程空闲的存活时间大小</li>
+        <li><strong>unit：</strong> 线程空闲存活时间单位</li>
+        <li><strong>workQueue：</strong> 存放任务的阻塞队列</li>
+        <li><strong>threadFactory：</strong> 用于设置创建线程的工厂，可以给创建的线程设置有意义的名字，可方便排查问题。</li>
+        <li><strong>handler：</strong>  线城池的饱和策略事件，主要有四种类型。</li>
+    </ul>
+    <h2 class="heading" data-id="heading-4">任务执行</h2>
+    <h3 class="heading" data-id="heading-5">线程池执行流程，即对应execute()方法：</h3>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/7/16bca03a5a6fd78f?imageView2/0/w/1280/h/960/ignore-error/1" data-width="800" data-height="370"><figcaption></figcaption></figure><p></p>
+    <ul>
+        <li>提交一个任务，线程池里存活的核心线程数小于线程数corePoolSize时，线程池会创建一个核心线程去处理提交的任务。</li>
+        <li>如果线程池核心线程数已满，即线程数已经等于corePoolSize，一个新提交的任务，会被放进任务队列workQueue排队等待执行。</li>
+        <li>当线程池里面存活的线程数已经等于corePoolSize了,并且任务队列workQueue也满，判断线程数是否达到maximumPoolSize，即最大线程数是否已满，如果没到达，创建一个非核心线程执行提交的任务。</li>
+        <li>如果当前的线程数达到了maximumPoolSize，还有新的任务过来的话，直接采用拒绝策略处理。</li>
+    </ul>
+    <h3 class="heading" data-id="heading-6">四种拒绝策略</h3>
+    <ul>
+        <li>AbortPolicy(抛出一个异常，默认的)</li>
+        <li>DiscardPolicy(直接丢弃任务)</li>
+        <li>DiscardOldestPolicy（丢弃队列里最老的任务，将当前这个任务继续提交给线程池）</li>
+        <li>CallerRunsPolicy（交给线程池调用所在的线程进行处理)</li>
+    </ul>
+    <h3 class="heading" data-id="heading-7">为了形象描述线程池执行，我打个比喻：</h3>
+    <ul>
+        <li>核心线程比作公司正式员工</li>
+        <li>非核心线程比作外包员工</li>
+        <li>阻塞队列比作需求池</li>
+        <li>提交任务比作提需求
+            <figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/13/16bea86ad171713d?imageView2/0/w/1280/h/960/ignore-error/1" data-width="766" data-height="875"><figcaption></figcaption></figure></li>
+        <li>当产品提个需求，正式员工（核心线程）先接需求（执行任务）</li>
+        <li>如果正式员工都有需求在做，即核心线程数已满），产品就把需求先放需求池（阻塞队列）。</li>
+        <li>如果需求池(阻塞队列)也满了，但是这时候产品继续提需求,怎么办呢？那就请外包（非核心线程）来做。</li>
+        <li>如果所有员工（最大线程数也满了）都有需求在做了，那就执行拒绝策略。</li>
+        <li>如果外包员工把需求做完了，它经过一段（keepAliveTime）空闲时间，就离开公司了。</li>
+    </ul>
+    <p>好的，到这里。<strong>面试问题1->Java的线程池说一下，各个参数的作用，如何进行的?</strong> 是否已经迎刃而解啦，
+        我觉得这个问题，回答：<strong>线程池构造函数的corePoolSize,maximumPoolSize等参数，并且能描述清楚线程池的执行流程</strong> 就差不多啦。</p>
+    <h2 class="heading" data-id="heading-8">线程池异常处理</h2>
+    <p>在使用线程池处理任务的时候，任务代码可能抛出RuntimeException，抛出异常后，线程池可能捕获它，也可能创建一个新的线程来代替异常的线程，我们可能无法感知任务出现了异常，因此我们需要考虑线程池异常情况。</p>
+    <h3 class="heading" data-id="heading-9">当提交新任务时，异常如何处理?</h3>
+    <p>我们先来看一段代码：</p>
+    <pre><code class="hljs java copyable" lang="java">       ExecutorService threadPool = Executors.newFixedThreadPool(<span class="hljs-number">5</span>);
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &#x3C; <span class="hljs-number">5</span>; i++) {
+            threadPool.submit(() -> {
+                System.out.println(<span class="hljs-string">"current thread name"</span> + Thread.currentThread().getName());
+                Object object = <span class="hljs-keyword">null</span>;
+                System.out.print(<span class="hljs-string">"result## "</span>+object.toString());
+            });
+        }
+
+<span class="copy-code-btn">复制代码</span></code></pre><p>显然，这段代码会有异常，我们再来看看执行结果</p>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/14/16bee347085e360b?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1280" data-height="680"><figcaption></figcaption></figure><p></p>
+    <p>虽然没有结果输出，但是没有抛出异常，所以我们无法感知任务出现了异常，所以需要添加try/catch。
+        如下图：
+    </p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/14/16bee41a1dfeef91?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1251" data-height="904"><figcaption></figcaption></figure>
+    OK，线程的异常处理，<strong>我们可以直接try...catch捕获。</strong><p></p>
+    <h3 class="heading" data-id="heading-10">线程池exec.submit(runnable)的执行流程</h3>
+    <p>通过debug上面有异常的submit方法（<strong>建议大家也去debug看一下,图上的每个方法内部是我打断点的地方</strong>），处理有异常submit方法的主要执行流程图：</p>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/14/16bef895fec0d45b?imageView2/0/w/1280/h/960/ignore-error/1" data-width="783" data-height="953"><figcaption></figcaption></figure><p></p>
+    <pre><code class="hljs java copyable" lang="java">  <span class="hljs-comment">//构造feature对象</span>
+  <span class="hljs-comment">/**
+     * <span class="hljs-doctag">@throws</span> RejectedExecutionException {<span class="hljs-doctag">@inheritDoc</span>}
+     * <span class="hljs-doctag">@throws</span> NullPointerException       {<span class="hljs-doctag">@inheritDoc</span>}
+     */</span>
+    <span class="hljs-keyword">public</span> Future&#x3C;?> submit(Runnable task) {
+        <span class="hljs-keyword">if</span> (task == <span class="hljs-keyword">null</span>) <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NullPointerException();
+        RunnableFuture&#x3C;Void> ftask = newTaskFor(task, <span class="hljs-keyword">null</span>);
+        execute(ftask);
+        <span class="hljs-keyword">return</span> ftask;
+    }
+     <span class="hljs-keyword">protected</span> &#x3C;T> <span class="hljs-function">RunnableFuture&#x3C;T> <span class="hljs-title">newTaskFor</span><span class="hljs-params">(Runnable runnable, T value)</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> FutureTask&#x3C;T>(runnable, value);
+    }
+     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">FutureTask</span><span class="hljs-params">(Runnable runnable, V result)</span> </span>{
+        <span class="hljs-keyword">this</span>.callable = Executors.callable(runnable, result);
+        <span class="hljs-keyword">this</span>.state = NEW;       <span class="hljs-comment">// ensure visibility of callable</span>
+    }
+       <span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> &#x3C;T> <span class="hljs-function">Callable&#x3C;T> <span class="hljs-title">callable</span><span class="hljs-params">(Runnable task, T result)</span> </span>{
+        <span class="hljs-keyword">if</span> (task == <span class="hljs-keyword">null</span>)
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NullPointerException();
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> RunnableAdapter&#x3C;T>(task, result);
+    }
+    <span class="hljs-comment">//线程池执行</span>
+     <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">execute</span><span class="hljs-params">(Runnable command)</span> </span>{
+        <span class="hljs-keyword">if</span> (command == <span class="hljs-keyword">null</span>)
+            <span class="hljs-keyword">throw</span> <span class="hljs-keyword">new</span> NullPointerException();
+               <span class="hljs-keyword">int</span> c = ctl.get();
+        <span class="hljs-keyword">if</span> (workerCountOf(c) &#x3C; corePoolSize) {
+            <span class="hljs-keyword">if</span> (addWorker(command, <span class="hljs-keyword">true</span>))
+                <span class="hljs-keyword">return</span>;
+            c = ctl.get();
+        }
+        <span class="hljs-keyword">if</span> (isRunning(c) &#x26;&#x26; workQueue.offer(command)) {
+            <span class="hljs-keyword">int</span> recheck = ctl.get();
+            <span class="hljs-keyword">if</span> (! isRunning(recheck) &#x26;&#x26; remove(command))
+                reject(command);
+            <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (workerCountOf(recheck) == <span class="hljs-number">0</span>)
+                addWorker(<span class="hljs-keyword">null</span>, <span class="hljs-keyword">false</span>);
+        }
+        <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (!addWorker(command, <span class="hljs-keyword">false</span>))
+            reject(command);
+    }
+    <span class="hljs-comment">//捕获异常</span>
+    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">void</span> <span class="hljs-title">run</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">if</span> (state != NEW ||
+            !UNSAFE.compareAndSwapObject(<span class="hljs-keyword">this</span>, runnerOffset,
+                                         <span class="hljs-keyword">null</span>, Thread.currentThread()))
+            <span class="hljs-keyword">return</span>;
+        <span class="hljs-keyword">try</span> {
+            Callable&#x3C;V> c = callable;
+            <span class="hljs-keyword">if</span> (c != <span class="hljs-keyword">null</span> &#x26;&#x26; state == NEW) {
+                V result;
+                <span class="hljs-keyword">boolean</span> ran;
+                <span class="hljs-keyword">try</span> {
+                    result = c.call();
+                    ran = <span class="hljs-keyword">true</span>;
+                } <span class="hljs-keyword">catch</span> (Throwable ex) {
+                    result = <span class="hljs-keyword">null</span>;
+                    ran = <span class="hljs-keyword">false</span>;
+                    setException(ex);
+                }
+                <span class="hljs-keyword">if</span> (ran)
+                    set(result);
+            }
+        } <span class="hljs-keyword">finally</span> {
+            <span class="hljs-comment">// runner must be non-null until state is settled to</span>
+            <span class="hljs-comment">// prevent concurrent calls to run()</span>
+            runner = <span class="hljs-keyword">null</span>;
+            <span class="hljs-comment">// state must be re-read after nulling runner to prevent</span>
+            <span class="hljs-comment">// leaked interrupts</span>
+            <span class="hljs-keyword">int</span> s = state;
+            <span class="hljs-keyword">if</span> (s >= INTERRUPTING)
+                handlePossibleCancellationInterrupt(s);
+        }
+<span class="copy-code-btn">复制代码</span></code></pre><p>通过以上分析，<strong>submit执行的任务，可以通过Future对象的get方法接收抛出的异常，再进行处理。</strong>
+        我们再通过一个demo，看一下Future对象的get方法处理异常的姿势，如下图：</p>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/14/16bef9bb609bbe31?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1280" data-height="945"><figcaption></figcaption></figure><p></p>
+    <h3 class="heading" data-id="heading-11">其他两种处理线程池异常方案</h3>
+    <p>除了以上<strong>1.在任务代码try/catch捕获异常，2.通过Future对象的get方法接收抛出的异常，再处理</strong>两种方案外，还有以上两种方案：</p>
+    <h4 class="heading" data-id="heading-12">3.为工作者线程设置UncaughtExceptionHandler，在uncaughtException方法中处理异常</h4>
+    <p>我们直接看这样实现的正确姿势：</p>
+    <pre><code class="hljs java copyable" lang="java">ExecutorService threadPool = Executors.newFixedThreadPool(<span class="hljs-number">1</span>, r -> {
+            Thread t = <span class="hljs-keyword">new</span> Thread(r);
+            t.setUncaughtExceptionHandler(
+                    (t1, e) -> {
+                        System.out.println(t1.getName() + <span class="hljs-string">"线程抛出的异常"</span>+e);
+                    });
+            <span class="hljs-keyword">return</span> t;
+           });
+        threadPool.execute(()->{
+            Object object = <span class="hljs-keyword">null</span>;
+            System.out.print(<span class="hljs-string">"result## "</span> + object.toString());
+        });
+<span class="copy-code-btn">复制代码</span></code></pre><p>运行结果：
+    </p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/14/16bf00f61b40c749?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1183" data-height="662"><figcaption></figcaption></figure><p></p>
+    <h4 class="heading" data-id="heading-13">4.重写ThreadPoolExecutor的afterExecute方法，处理传递的异常引用</h4>
+    <p>这是jdk文档的一个demo：</p>
+    <pre><code class="hljs java copyable" lang="java"><span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ExtendedExecutor</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">ThreadPoolExecutor</span> </span>{
+    <span class="hljs-comment">// 这可是jdk文档里面给的例子。。</span>
+    <span class="hljs-function"><span class="hljs-keyword">protected</span> <span class="hljs-keyword">void</span> <span class="hljs-title">afterExecute</span><span class="hljs-params">(Runnable r, Throwable t)</span> </span>{
+        <span class="hljs-keyword">super</span>.afterExecute(r, t);
+        <span class="hljs-keyword">if</span> (t == <span class="hljs-keyword">null</span> &#x26;&#x26; r <span class="hljs-keyword">instanceof</span> Future&#x3C;?>) {
+            <span class="hljs-keyword">try</span> {
+                Object result = ((Future&#x3C;?>) r).get();
+            } <span class="hljs-keyword">catch</span> (CancellationException ce) {
+                t = ce;
+            } <span class="hljs-keyword">catch</span> (ExecutionException ee) {
+                t = ee.getCause();
+            } <span class="hljs-keyword">catch</span> (InterruptedException ie) {
+                Thread.currentThread().interrupt(); <span class="hljs-comment">// ignore/reset</span>
+            }
+        }
+        <span class="hljs-keyword">if</span> (t != <span class="hljs-keyword">null</span>)
+            System.out.println(t);
+    }
+}}
+<span class="copy-code-btn">复制代码</span></code></pre><h3 class="heading" data-id="heading-14">因此，被问到线程池异常处理，如何回答？</h3>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/14/16bec33ca5559c93?imageView2/0/w/1280/h/960/ignore-error/1" data-width="985" data-height="728"><figcaption></figcaption></figure>。<p></p>
+    <h2 class="heading" data-id="heading-15">线程池的工作队列</h2>
+    <p><strong>线程池都有哪几种工作队列？</strong></p>
+    <ul>
+        <li>ArrayBlockingQueue</li>
+        <li>LinkedBlockingQueue</li>
+        <li>DelayQueue</li>
+        <li>PriorityBlockingQueue</li>
+        <li>SynchronousQueue</li>
+    </ul>
+    <h3 class="heading" data-id="heading-16">ArrayBlockingQueue</h3>
+    <p>ArrayBlockingQueue（有界队列）是一个用数组实现的有界阻塞队列，按FIFO排序量。</p>
+    <h3 class="heading" data-id="heading-17">LinkedBlockingQueue</h3>
+    <p>LinkedBlockingQueue（可设置容量队列）基于链表结构的阻塞队列，按FIFO排序任务，容量可以选择进行设置，不设置的话，将是一个无边界的阻塞队列，最大长度为Integer.MAX_VALUE，吞吐量通常要高于ArrayBlockingQuene；newFixedThreadPool线程池使用了这个队列</p>
+    <h3 class="heading" data-id="heading-18">DelayQueue</h3>
+    <p>DelayQueue（延迟队列）是一个任务定时周期的延迟执行的队列。根据指定的执行时间从小到大排序，否则根据插入到队列的先后排序。newScheduledThreadPool线程池使用了这个队列。</p>
+    <h3 class="heading" data-id="heading-19">PriorityBlockingQueue</h3>
+    <p>PriorityBlockingQueue（优先级队列）是具有优先级的无界阻塞队列；</p>
+    <h3 class="heading" data-id="heading-20">SynchronousQueue</h3>
+    <p>SynchronousQueue（同步队列）一个不存储元素的阻塞队列，每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQuene，newCachedThreadPool线程池使用了这个队列。</p>
+    <p>针对面试题：<strong>线程池都有哪几种工作队列？</strong> 我觉得，<strong>回答以上几种ArrayBlockingQueue，LinkedBlockingQueue，SynchronousQueue等，说出它们的特点，并结合使用到对应队列的常用线程池(如newFixedThreadPool线程池使用LinkedBlockingQueue)，进行展开阐述，</strong> 就可以啦。</p>
+    <h2 class="heading" data-id="heading-21">几种常用的线程池</h2>
+    <ul>
+        <li>newFixedThreadPool (固定数目线程的线程池)</li>
+        <li>newCachedThreadPool(可缓存线程的线程池)</li>
+        <li>newSingleThreadExecutor(单线程的线程池)</li>
+        <li>newScheduledThreadPool(定时及周期执行的线程池)</li>
+    </ul>
+    <h3 class="heading" data-id="heading-22">newFixedThreadPool</h3>
+    <pre><code class="hljs java copyable" lang="java">  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ExecutorService <span class="hljs-title">newFixedThreadPool</span><span class="hljs-params">(<span class="hljs-keyword">int</span> nThreads, ThreadFactory threadFactory)</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ThreadPoolExecutor(nThreads, nThreads,
+                                      <span class="hljs-number">0L</span>, TimeUnit.MILLISECONDS,
+                                      <span class="hljs-keyword">new</span> LinkedBlockingQueue&#x3C;Runnable>(),
+                                      threadFactory);
+    }
+<span class="copy-code-btn">复制代码</span></code></pre><h4 class="heading" data-id="heading-23">线程池特点：</h4>
+    <ul>
+        <li>核心线程数和最大线程数大小一样</li>
+        <li>没有所谓的非空闲时间，即keepAliveTime为0</li>
+        <li>阻塞队列为无界队列LinkedBlockingQueue</li>
+    </ul>
+    <h4 class="heading" data-id="heading-24">工作机制：</h4>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/14/16bf109b642bc12e?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1022" data-height="472"><figcaption></figcaption></figure><p></p>
+    <ul>
+        <li>提交任务</li>
+        <li>如果线程数少于核心线程，创建核心线程执行任务</li>
+        <li>如果线程数等于核心线程，把任务添加到LinkedBlockingQueue阻塞队列</li>
+        <li>如果线程执行完任务，去阻塞队列取任务，继续执行。</li>
+    </ul>
+    <h4 class="heading" data-id="heading-25">实例代码</h4>
+    <pre><code class="hljs java copyable" lang="java">   ExecutorService executor = Executors.newFixedThreadPool(<span class="hljs-number">10</span>);
+                    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &#x3C; Integer.MAX_VALUE; i++) {
+                        executor.execute(()->{
+                            <span class="hljs-keyword">try</span> {
+                                Thread.sleep(<span class="hljs-number">10000</span>);
+                            } <span class="hljs-keyword">catch</span> (InterruptedException e) {
+                                <span class="hljs-comment">//do nothing</span>
+                            }
+            });
+<span class="copy-code-btn">复制代码</span></code></pre><p>IDE指定JVM参数：-Xmx8m -Xms8m :</p>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf2b9599369487?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1105" data-height="765"><figcaption></figcaption></figure><p></p>
+    <p>run以上代码，会抛出OOM：</p>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf2baa0728e61f?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1280" data-height="708"><figcaption></figcaption></figure><p></p>
+    <p>因此，<strong>面试题：使用无界队列的线程池会导致内存飙升吗？</strong></p>
+    <p>答案 <strong>：会的，newFixedThreadPool使用了无界的阻塞队列LinkedBlockingQueue，如果线程获取一个任务后，任务的执行时间比较长(比如，上面demo设置了10秒)，会导致队列的任务越积越多，导致机器内存使用不停飙升，</strong> 最终导致OOM。</p>
+    <h4 class="heading" data-id="heading-26">使用场景</h4>
+    <p>FixedThreadPool 适用于处理CPU密集型的任务，确保CPU在长期被工作线程使用的情况下，尽可能的少的分配线程，即适用执行长期的任务。</p>
+    <h3 class="heading" data-id="heading-27">newCachedThreadPool</h3>
+    <pre><code class="hljs java copyable" lang="java">   <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ExecutorService <span class="hljs-title">newCachedThreadPool</span><span class="hljs-params">(ThreadFactory threadFactory)</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> ThreadPoolExecutor(<span class="hljs-number">0</span>, Integer.MAX_VALUE,
+                                      <span class="hljs-number">60L</span>, TimeUnit.SECONDS,
+                                      <span class="hljs-keyword">new</span> SynchronousQueue&#x3C;Runnable>(),
+                                      threadFactory);
+    }
+<span class="copy-code-btn">复制代码</span></code></pre><h4 class="heading" data-id="heading-28">线程池特点：</h4>
+    <ul>
+        <li>核心线程数为0</li>
+        <li>最大线程数为Integer.MAX_VALUE</li>
+        <li>阻塞队列是SynchronousQueue</li>
+        <li>非核心线程空闲存活时间为60秒</li>
+    </ul>
+    <p>当提交任务的速度大于处理任务的速度时，每次提交一个任务，就必然会创建一个线程。极端情况下会创建过多的线程，耗尽 CPU 和内存资源。由于空闲 60 秒的线程会被终止，长时间保持空闲的 CachedThreadPool 不会占用任何资源。</p>
+    <h4 class="heading" data-id="heading-29">工作机制</h4>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf2d1734c8f96d?imageView2/0/w/1280/h/960/ignore-error/1" data-width="832" data-height="839"><figcaption></figcaption></figure><p></p>
+    <ul>
+        <li>提交任务</li>
+        <li>因为没有核心线程，所以任务直接加到SynchronousQueue队列。</li>
+        <li>判断是否有空闲线程，如果有，就去取出任务执行。</li>
+        <li>如果没有空闲线程，就新建一个线程执行。</li>
+        <li>执行完任务的线程，还可以存活60秒，如果在这期间，接到任务，可以继续活下去；否则，被销毁。</li>
+    </ul>
+    <h4 class="heading" data-id="heading-30">实例代码</h4>
+    <pre><code class="hljs java copyable" lang="java">  ExecutorService executor = Executors.newCachedThreadPool();
+        <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &#x3C; <span class="hljs-number">5</span>; i++) {
+            executor.execute(() -> {
+                System.out.println(Thread.currentThread().getName()+<span class="hljs-string">"正在执行"</span>);
+            });
+        }
+<span class="copy-code-btn">复制代码</span></code></pre><p>运行结果：</p>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf2ddffd11762b?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1238" data-height="608"><figcaption></figcaption></figure><p></p>
+    <h4 class="heading" data-id="heading-31">使用场景</h4>
+    <p>用于并发执行大量短期的小任务。</p>
+    <h3 class="heading" data-id="heading-32">newSingleThreadExecutor</h3>
+    <pre><code class="hljs java copyable" lang="java">  <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-keyword">static</span> ExecutorService <span class="hljs-title">newSingleThreadExecutor</span><span class="hljs-params">(ThreadFactory threadFactory)</span> </span>{
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> FinalizableDelegatedExecutorService
+            (<span class="hljs-keyword">new</span> ThreadPoolExecutor(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>,
+                                    <span class="hljs-number">0L</span>, TimeUnit.MILLISECONDS,
+                                    <span class="hljs-keyword">new</span> LinkedBlockingQueue&#x3C;Runnable>(),
+                                    threadFactory));
+    }
+<span class="copy-code-btn">复制代码</span></code></pre><h4 class="heading" data-id="heading-33">线程池特点</h4>
+    <ul>
+        <li>核心线程数为1</li>
+        <li>最大线程数也为1</li>
+        <li>阻塞队列是LinkedBlockingQueue</li>
+        <li>keepAliveTime为0</li>
+    </ul>
+    <h4 class="heading" data-id="heading-34">工作机制</h4>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf2e62d7dbaaea?imageView2/0/w/1280/h/960/ignore-error/1" data-width="668" data-height="619"><figcaption></figcaption></figure><p></p>
+    <ul>
+        <li>提交任务</li>
+        <li>线程池是否有一条线程在，如果没有，新建线程执行任务</li>
+        <li>如果有，讲任务加到阻塞队列</li>
+        <li>当前的唯一线程，从队列取任务，执行完一个，再继续取，一个人（一条线程）夜以继日地干活。</li>
+    </ul>
+    <h4 class="heading" data-id="heading-35">实例代码</h4>
+    <pre><code class="hljs java copyable" lang="java">  ExecutorService executor = Executors.newSingleThreadExecutor();
+                <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &#x3C; <span class="hljs-number">5</span>; i++) {
+                    executor.execute(() -> {
+                        System.out.println(Thread.currentThread().getName()+<span class="hljs-string">"正在执行"</span>);
+                    });
+        }
+<span class="copy-code-btn">复制代码</span></code></pre><p>运行结果：</p>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf2ecf78989289?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1247" data-height="550"><figcaption></figcaption></figure><p></p>
+    <h4 class="heading" data-id="heading-36">使用场景</h4>
+    <p>适用于串行执行任务的场景，一个任务一个任务地执行。</p>
+    <h3 class="heading" data-id="heading-37">newScheduledThreadPool</h3>
+    <pre><code class="hljs java copyable" lang="java">    <span class="hljs-function"><span class="hljs-keyword">public</span> <span class="hljs-title">ScheduledThreadPoolExecutor</span><span class="hljs-params">(<span class="hljs-keyword">int</span> corePoolSize)</span> </span>{
+        <span class="hljs-keyword">super</span>(corePoolSize, Integer.MAX_VALUE, <span class="hljs-number">0</span>, NANOSECONDS,
+              <span class="hljs-keyword">new</span> DelayedWorkQueue());
+    }
+<span class="copy-code-btn">复制代码</span></code></pre><h4 class="heading" data-id="heading-38">线程池特点</h4>
+    <ul>
+        <li>最大线程数为Integer.MAX_VALUE</li>
+        <li>阻塞队列是DelayedWorkQueue</li>
+        <li>keepAliveTime为0</li>
+        <li>scheduleAtFixedRate() ：按某种速率周期执行</li>
+        <li>scheduleWithFixedDelay()：在某个延迟后执行</li>
+    </ul>
+    <h4 class="heading" data-id="heading-39">工作机制</h4>
+    <ul>
+        <li>添加一个任务</li>
+        <li>线程池中的线程从 DelayQueue 中取任务</li>
+        <li>线程从 DelayQueue 中获取 time 大于等于当前时间的task</li>
+        <li>执行完后修改这个 task 的 time 为下次被执行的时间</li>
+        <li>这个 task 放回DelayQueue队列中</li>
+    </ul>
+    <h4 class="heading" data-id="heading-40">实例代码</h4>
+    <pre><code class="hljs java copyable" lang="java">    <span class="hljs-comment">/**
+    创建一个给定初始延迟的间隔性的任务，之后的下次执行时间是上一次任务从执行到结束所需要的时间+* 给定的间隔时间
+    */</span>
+    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(<span class="hljs-number">1</span>);
+        scheduledExecutorService.scheduleWithFixedDelay(()->{
+            System.out.println(<span class="hljs-string">"current Time"</span> + System.currentTimeMillis());
+            System.out.println(Thread.currentThread().getName()+<span class="hljs-string">"正在执行"</span>);
+        }, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, TimeUnit.SECONDS);
+<span class="copy-code-btn">复制代码</span></code></pre><p>运行结果：</p>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf315061f0ed2d?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1280" data-height="611"><figcaption></figcaption></figure><p></p>
+    <pre><code class="hljs java copyable" lang="java">    <span class="hljs-comment">/**
+    创建一个给定初始延迟的间隔性的任务，之后的每次任务执行时间为 初始延迟 + N * delay(间隔)
+    */</span>
+    ScheduledExecutorService scheduledExecutorService = Executors.newScheduledThreadPool(<span class="hljs-number">1</span>);
+            scheduledExecutorService.scheduleAtFixedRate(()->{
+            System.out.println(<span class="hljs-string">"current Time"</span> + System.currentTimeMillis());
+            System.out.println(Thread.currentThread().getName()+<span class="hljs-string">"正在执行"</span>);
+        }, <span class="hljs-number">1</span>, <span class="hljs-number">3</span>, TimeUnit.SECONDS);;
+<span class="copy-code-btn">复制代码</span></code></pre><h4 class="heading" data-id="heading-41">使用场景</h4>
+    <p>周期性执行任务的场景，需要限制线程数量的场景</p>
+    <p>回到面试题：<strong>说说几种常见的线程池及使用场景？</strong></p>
+    <p>回答这四种经典线程池 <strong>：newFixedThreadPool，newSingleThreadExecutor，newCachedThreadPool，newScheduledThreadPool，分线程池特点，工作机制，使用场景分开描述，再分析可能存在的问题，比如newFixedThreadPool内存飙升问题</strong> 即可</p>
+    <h2 class="heading" data-id="heading-42">线程池状态</h2>
+    <p>线程池有这几个状态：RUNNING,SHUTDOWN,STOP,TIDYING,TERMINATED。</p>
+    <pre><code class="hljs java copyable" lang="java">   <span class="hljs-comment">//线程池状态</span>
+   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> RUNNING    = -<span class="hljs-number">1</span> &#x3C;&#x3C; COUNT_BITS;
+   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> SHUTDOWN   =  <span class="hljs-number">0</span> &#x3C;&#x3C; COUNT_BITS;
+   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> STOP       =  <span class="hljs-number">1</span> &#x3C;&#x3C; COUNT_BITS;
+   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> TIDYING    =  <span class="hljs-number">2</span> &#x3C;&#x3C; COUNT_BITS;
+   <span class="hljs-keyword">private</span> <span class="hljs-keyword">static</span> <span class="hljs-keyword">final</span> <span class="hljs-keyword">int</span> TERMINATED =  <span class="hljs-number">3</span> &#x3C;&#x3C; COUNT_BITS;
+<span class="copy-code-btn">复制代码</span></code></pre><h3 class="heading" data-id="heading-43">线程池各个状态切换图：</h3>
+    <p></p><figure><img class="lazyload" data-src="https://user-gold-cdn.xitu.io/2019/7/15/16bf3b10e39a52d0?imageView2/0/w/1280/h/960/ignore-error/1" data-width="1227" data-height="494"><figcaption></figcaption></figure><p></p>
+    <p><strong>RUNNING</strong></p>
+    <ul>
+        <li>该状态的线程池会接收新任务，并处理阻塞队列中的任务;</li>
+        <li>调用线程池的shutdown()方法，可以切换到SHUTDOWN状态;</li>
+        <li>调用线程池的shutdownNow()方法，可以切换到STOP状态;</li>
+    </ul>
+    <p><strong>SHUTDOWN</strong></p>
+    <ul>
+        <li>该状态的线程池不会接收新任务，但会处理阻塞队列中的任务；</li>
+        <li>队列为空，并且线程池中执行的任务也为空,进入TIDYING状态;</li>
+    </ul>
+    <p><strong>STOP</strong></p>
+    <ul>
+        <li>该状态的线程不会接收新任务，也不会处理阻塞队列中的任务，而且会中断正在运行的任务；</li>
+        <li>线程池中执行的任务为空,进入TIDYING状态;</li>
+    </ul>
+    <p><strong>TIDYING</strong></p>
+    <ul>
+        <li>该状态表明所有的任务已经运行终止，记录的任务数量为0。</li>
+        <li>terminated()执行完毕，进入TERMINATED状态</li>
+    </ul>
+    <p><strong>TERMINATED</strong></p>
+    <ul>
+        <li>该状态表示线程池彻底终止</li>
+    </ul>
+    <h2 class="heading" data-id="heading-44">参考与感谢</h2>
+    <ul>
+        <li>Java线程池异常处理方案：<a target="_blank" href="https://www.jianshu.com/p/30e488f4e021" rel="nofollow noopener noreferrer">www.jianshu.com/p/30e488f4e…</a></li>
+        <li>Java线程池  <a target="_blank" href="https://www.hollischuang.com/archives/2888" rel="nofollow noopener noreferrer">www.hollischuang.com/archives/28…</a></li>
+        <li>关于线程池的面试题 <a target="_blank" href="https://www.jianshu.com/p/9710b899e749" rel="nofollow noopener noreferrer">www.jianshu.com/p/9710b899e…</a></li>
+        <li>线程池的五种状态 <a target="_blank" href="https://blog.csdn.net/l_kanglin/article/details/57411851" rel="nofollow noopener noreferrer">blog.csdn.net/l_kanglin/a…</a></li>
+        <li>深入分析java线程池的实现原理 <a target="_blank" href="https://www.jianshu.com/p/87bff5cc8d8c/" rel="nofollow noopener noreferrer">www.jianshu.com/p/87bff5cc8…</a></li>
+    </ul>
+    <h2 class="heading" data-id="heading-45">个人公众号</h2>
+    <ul>
+        <li>欢迎大家关注，大家一起学习，一起讨论。</li>
+        <li>github地址：<a target="_blank" href="https://github.com/whx123/JavaHome" rel="nofollow noopener noreferrer">github.com/whx123/Java…</a></li>
+    </ul>
+</body>
+</html>

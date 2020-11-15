@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.test.CicadaActivityRuleMapper">
+    <resultMap id="zlxCdkeyRecordResultMap" type="com.arc.zero.mapper.test.CicadaActivityRuleDO">
+        <id property="id" column="activity_rule_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="activityId" column="activity_rule_activity_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="activityName" column="activity_rule_activity_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="creator" column="activity_rule_creator" javaType="string" jdbcType="VARCHAR"/>
+        <result property="feature" column="activity_rule_feature" javaType="string" jdbcType="VARCHAR"/>
+        <result property="gmtCreate" column="activity_rule_gmt_create" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="gmtEffectEnd" column="activity_rule_gmt_effect_end" javaType="java.util.Date"
+                jdbcType="TIMESTAMP"/>
+        <result property="gmtEffectStart" column="activity_rule_gmt_effect_start" javaType="java.util.Date"
+                jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="activity_rule_gmt_modified" javaType="java.util.Date"
+                jdbcType="TIMESTAMP"/>
+        <result property="lessonId" column="activity_rule_lesson_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="lessonName" column="activity_rule_lesson_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="orgId" column="activity_rule_org_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="orgName" column="activity_rule_org_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="productId" column="activity_rule_product_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="productName" column="activity_rule_product_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="state" column="activity_rule_state" javaType="int" jdbcType="INTEGER"/>
+        <result property="ykChargeId" column="activity_rule_yk_charge_id" javaType="long" jdbcType="BIGINT"/>
+    </resultMap>
+
+
+    <!-- 所有的列-->
+    <sql id="sqlZlxActivityRuleColumns">
+		activity_rule_.id AS activity_rule_id,
+		activity_rule_.activity_id AS activity_rule_activity_id,
+		activity_rule_.activity_name AS activity_rule_activity_name,
+		activity_rule_.creator AS activity_rule_creator,
+		activity_rule_.feature AS activity_rule_feature,
+		activity_rule_.gmt_create AS activity_rule_gmt_create,
+		activity_rule_.gmt_effect_end AS activity_rule_gmt_effect_end,
+		activity_rule_.gmt_effect_start AS activity_rule_gmt_effect_start,
+		activity_rule_.gmt_modified AS activity_rule_gmt_modified,
+		activity_rule_.lesson_id AS activity_rule_lesson_id,
+		activity_rule_.lesson_name AS activity_rule_lesson_name,
+		activity_rule_.org_id AS activity_rule_org_id,
+		activity_rule_.org_name AS activity_rule_org_name,
+		activity_rule_.product_id AS activity_rule_product_id,
+		activity_rule_.product_name AS activity_rule_product_name,
+		activity_rule_.state AS activity_rule_state,
+		activity_rule_.yk_charge_id AS activity_rule_yk_charge_id
+	</sql>
+
+    <!-- where-->
+    <sql id="whereStatement">
+        <where>
+            activity_rule_.org_id = #{request.orgId}
+            <if test="request.id != null">and activity_rule_.id = #{request.id}</if>
+            <if test="request.activityId != null">and activity_rule_.activity_id = #{request.activityId}</if>
+            <if test="request.activityName!=null">and activity_rule_.activity_name = #{request.activityName}</if>
+
+            <if test="request.lessonId!=null">and activity_rule_.lesson_id = #{request.lessonId}</if>
+
+            <if test="request.orgId!=null">and activity_rule_.org_id = #{request.orgId}</if>
+            <if test="request.productId!=null">and activity_rule_.product_id = #{request.productId}</if>
+            <if test="request.state!=null">and activity_rule_.state = #{request.state}</if>
+            <if test="request.ykChargeId!=null">and activity_rule_.yk_charge_id = #{request.ykChargeId}</if>
+
+            <if test="request.gmtEffectEnd!=null">and activity_rule_.gmt_effect_end = #{request.gmtEffectEnd}</if>
+            <if test="request.gmtEffectStart!=null">and activity_rule_.gmt_effect_start = #{request.gmtEffectStart}</if>
+
+
+            <if test="request.activityName != null">and activity_rule_.activity_name like
+                CONCAT('%',#{request.activityName},'%')
+            </if>
+            <if test="request.creator != null">and activity_rule_.creator like CONCAT('%',#{request.creator},'%')</if>
+            <if test="request.lessonName != null">and activity_rule_.lesson_name like
+                CONCAT('%',#{request.lessonName},'%')
+            </if>
+            <if test="request.orgName != null">and activity_rule_.org_name like CONCAT('%',#{request.orgName},'%')</if>
+            <if test="request.productName != null">and activity_rule_.product_name like
+                CONCAT('%',#{request.productName},'%')
+            </if>
+            limit #{request.startRow}, #{request.endRow}
+        </where>
+    </sql>
+
+
+    <insert id="insert" parameterType="com.arc.zero.mapper.test.CicadaActivityRuleDO" useGeneratedKeys="true"
+            keyProperty="id">
+		INSERT INTO zlx_activity_rule (
+		    gmt_create,
+			gmt_modified,
+			creator,
+
+			activity_id,
+			activity_name,
+			feature,
+			gmt_effect_end,
+			gmt_effect_start,
+			lesson_id,
+			lesson_name,
+			org_id,
+			org_name,
+			product_id,
+			product_name,
+			`state`,
+			yk_charge_id
+		)
+        VALUES (
+
+            now(),
+            now(),
+			#{creator},
+
+			#{activityId},
+			#{activityName},
+			#{feature},
+			#{gmtEffectEnd},
+			#{gmtEffectStart},
+			#{lessonId},
+			#{lessonName},
+			#{orgId},
+			#{orgName},
+			#{productId},
+			#{productName},
+			#{state},
+			#{ykChargeId}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.arc.zero.mapper.test.CicadaActivityRuleDO">
+        UPDATE zlx_activity_rule
+        <set>
+            gmt_modified= new()
+            <if test="activityId != null">,activity_id = #{activityId},</if>
+            <if test="activityName != null and activityName != ''">,activity_name = #{activityName}</if>
+            <if test="creator != null and creator != ''">,creator = #{creator}</if>
+            <if test="feature != null and feature != ''">,feature = #{feature}</if>
+            <if test="gmtEffectEnd != null">,gmt_effect_end = #{gmtEffectEnd}</if>
+            <if test="gmtEffectStart != null">,gmt_effect_start = #{gmtEffectStart}</if>
+            <if test="lessonId != null">,lesson_id = #{lessonId}</if>
+            <if test="lessonName != null and lessonName != ''">,lesson_name = #{lessonName}</if>
+            <if test="orgId != null">,org_id = #{orgId}</if>
+            <if test="orgName != null and orgName != ''">,org_name = #{orgName}</if>
+            <if test="productId != null">,product_id = #{productId}</if>
+            <if test="productName != null and productName != ''">,product_name = #{productName}</if>
+            <if test="state != null">,`state` = #{state}</if>
+            <if test="ykChargeId != null">,yk_charge_id = #{ykChargeId}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM  zlx_activity_rule
+        WHERE  id = #{id}
+    </delete>
+
+
+    <select id="selectPageCount" resultType="java.lang.Long">
+        select count(*) from zlx_activity_rule as activity_rule_
+        <include refid="whereStatement"/>
+    </select>
+
+
+    <select id="selectPageList" resultMap="zlxCdkeyRecordResultMap">
+        SELECT
+        <include refid="sqlZlxActivityRuleColumns"/>
+        FROM zlx_activity_rule AS activity_rule_
+        <include refid="whereStatement"/>
+    </select>
+
+    <!--查询一条数据-->
+    <select id="selectOne" resultMap="zlxCdkeyRecordResultMap">
+        SELECT
+        <include refid="sqlZlxActivityRuleColumns"/>
+        FROM zlx_activity_rule AS activity_rule_
+        WHERE activity_rule_.id = #{id}
+    </select>
+
+
+</mapper>

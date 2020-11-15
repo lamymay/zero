@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.system.KeyValueMapper">
+    <resultMap id="keyValue" type="com.arc.core.model.domain.system.KeyValue">
+        <id property="id" column="id" javaType="long" jdbcType="BIGINT"/>
+        <result property="key" column="key" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <result property="value" column="value" javaType="java.lang.String" jdbcType="VARCHAR"/>
+
+        <result property="range" column="range" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="note" column="note" javaType="java.lang.String" jdbcType="VARCHAR"/>
+        <!--        <result property="enable" column="enable" javaType="com.arc.core.enums.common.EnableEnum" jdbcType="VARCHAR"/>-->
+
+        <!-- <result property="typeEnum" column="type_enum" javaType="com.arc.core.enums.common.EnableEnum" jdbcType="VARCHAR"/>-->
+    </resultMap>
+
+    <sql id="sqlKeyValueColumns">
+    id,
+    `key`,
+    `value`,
+
+    `range`,
+    `note`
+     </sql>
+
+    <insert id="save" parameterType="com.arc.core.model.domain.system.KeyValue" useGeneratedKeys="true"
+            keyProperty="id">
+		INSERT INTO t_kv (
+		`key`,
+		`value`,
+		`range`,
+
+		`note`
+
+		)
+        VALUES (
+			#{key},
+			#{value},
+			#{range},
+
+			#{note}
+		)
+	</insert>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM  t_kv
+        WHERE  id = #{id}
+    </delete>
+
+
+    <delete id="deleteByRequest" parameterType="map">
+        DELETE FROM t_kv
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="key != null">`key` = #{key}</if>
+            <if test="range != null">range = #{range}</if>
+        </where>
+    </delete>
+
+    <select id="get" parameterType="long" resultMap="keyValue">
+        SELECT
+        <include refid="sqlKeyValueColumns"/>
+        FROM t_kv
+        WHERE id = #{id}
+    </select>
+
+    <select id="listAll" resultMap="keyValue">
+        SELECT
+        <include refid="sqlKeyValueColumns"/>
+        FROM t_kv
+    </select>
+
+    <select id="list" parameterType="com.arc.core.model.domain.system.KeyValue" resultMap="keyValue">
+        SELECT
+        <include refid="sqlKeyValueColumns"/>
+        FROM t_kv
+        <where>
+            <if test="range != null">range = #{range}</if>
+            <if test="id != null">id = #{id}</if>
+            <if test="key != null">`key` = #{key}</if>
+        </where>
+    </select>
+
+</mapper>

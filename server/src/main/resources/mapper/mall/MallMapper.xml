@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.mall.MallMapper">
+    <resultMap id="mall" type="com.arc.core.model.domain.mall.Mall">
+        <id property="id" column="mall_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="taskName" column="mall_task_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="mallName" column="mall_mall_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="mallArea" column="mall_mall_area" javaType="string" jdbcType="VARCHAR"/>
+        <result property="provinceName" column="mall_province_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="cityName" column="mall_city_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="districtName" column="mall_district_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="townName" column="mall_town_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="road" column="mall_road" javaType="string" jdbcType="VARCHAR"/>
+        <result property="note" column="mall_note" javaType="string" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="sqlMallColumns">
+		mall_.id AS mall_id,
+		mall_.task_name AS mall_task_name,
+		mall_.mall_name AS mall_mall_name,
+		mall_.mall_area AS mall_mall_area,
+		mall_.province_name AS mall_province_name,
+		mall_.city_name AS mall_city_name,
+		mall_.district_name AS mall_district_name,
+		mall_.town_name AS mall_town_name,
+		mall_.road AS mall_road,
+		mall_.note AS mall_note
+	</sql>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM  t_mall
+        WHERE  id = #{id,jdbcType=BIGINT}
+
+    </delete>
+
+    <select id="get" parameterType="long" resultMap="mall">
+        SELECT
+        <include refid="sqlMallColumns"/>
+        FROM t_mall mall_
+        WHERE mall_.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="list" resultMap="mall">
+        SELECT
+        <include refid="sqlMallColumns"/>
+        FROM t_mall mall_
+    </select>
+
+    <insert id="save" parameterType="com.arc.core.model.domain.mall.Mall" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_mall (
+			task_name,
+			mall_name,
+			mall_area,
+			province_name,
+			city_name,
+			district_name,
+			town_name,
+			road,
+			note
+		)
+        VALUES (
+			#{taskName,jdbcType=VARCHAR},
+			#{mallName,jdbcType=VARCHAR},
+			#{mallArea,jdbcType=VARCHAR},
+			#{provinceName,jdbcType=VARCHAR},
+			#{cityName,jdbcType=VARCHAR},
+			#{districtName,jdbcType=VARCHAR},
+			#{townName,jdbcType=VARCHAR},
+			#{road,jdbcType=VARCHAR},
+			#{note,jdbcType=VARCHAR}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.arc.core.model.domain.mall.Mall">
+        UPDATE t_mall
+        <set>
+            <if test="taskName != null and taskName != ''">task_name = #{taskName,jdbcType=VARCHAR},</if>
+            <if test="mallName != null and mallName != ''">mall_name = #{mallName,jdbcType=VARCHAR},</if>
+            <if test="mallArea != null and mallArea != ''">mall_area = #{mallArea,jdbcType=VARCHAR},</if>
+            <if test="provinceName != null and provinceName != ''">province_name = #{provinceName,jdbcType=VARCHAR},
+            </if>
+            <if test="cityName != null and cityName != ''">city_name = #{cityName,jdbcType=VARCHAR},</if>
+            <if test="districtName != null and districtName != ''">district_name = #{districtName,jdbcType=VARCHAR},
+            </if>
+            <if test="townName != null and townName != ''">town_name = #{townName,jdbcType=VARCHAR},</if>
+            <if test="road != null and road != ''">road = #{road,jdbcType=VARCHAR},</if>
+            <if test="note != null and note != ''">note = #{note,jdbcType=VARCHAR},</if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

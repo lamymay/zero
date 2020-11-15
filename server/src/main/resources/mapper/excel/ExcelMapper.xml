@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.excel.ExcelMapper">
+    <!--
+        <resultMap id="excel" type="com.arc.zero.service.test.excel.ExcelEntity">
+            <id property="id" column="e_id" javaType="long" jdbcType="BIGINT"/>
+            <result property="userId" column="e_user_id" javaType="long" jdbcType="BIGINT"/>
+            <result property="joinId" column="e_join_id" javaType="long" jdbcType="BIGINT"/>
+            <result property="fileName" column="e_file_name" javaType="string" jdbcType="VARCHAR"/>
+            <result property="sheet" column="e_sheet" javaType="string" jdbcType="VARCHAR"/>
+            <result property="title" column="e_title" javaType="string" jdbcType="VARCHAR"/>
+            <result property="remark" column="e_remark" javaType="string" jdbcType="VARCHAR"/>
+        </resultMap>
+
+        <sql id="columns_e">
+            e_.id AS e_id,
+            e_.join_id AS e_join_id,
+            e_.user_id AS e_user_id,
+            e_.file_name AS e_file_name,
+            e_.sheet AS e_sheet,
+            e_.title AS e_title,
+            e_.remark AS e_remark,
+        </sql>
+    -->
+
+
+    <select id="listPage" resultType="com.arc.zero.model.excel.ExcelEntity">
+        SELECT *  FROM excel
+    </select>
+        <!--        <if test="offSet!=null and pageSize!=null">-->
+<!--        &#45;&#45; limit #{offSet},#{pageSize}-->
+        <!--        </if>-->
+
+    <select id="list" resultType="com.arc.zero.model.excel.ExcelEntity">
+        SELECT        *        FROM excel
+        </select>
+
+    <select id="countByJoinId" parameterType="long" resultType="int">
+     SELECT COUNT(e_.id)
+     FROM excel AS e_
+      WHERE e_.join_id = #{joinId}
+    </select>
+
+
+</mapper>

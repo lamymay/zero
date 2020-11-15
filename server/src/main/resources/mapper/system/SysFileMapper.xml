@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.system.SysFileMapper">
+    <resultMap id="sysFile" type="com.arc.core.model.domain.system.SysFile">
+        <id property="id" column="sys_file_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="name" column="sys_file_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="suffix" column="sys_file_suffix" javaType="string" jdbcType="VARCHAR"/>
+        <result property="version" column="sys_file_version" javaType="int" jdbcType="INTEGER"/>
+        <result property="code" column="sys_file_code" javaType="string" jdbcType="VARCHAR"/>
+        <result property="key" column="sys_file_key" javaType="string" jdbcType="VARCHAR"/>
+        <result property="length" column="sys_file_length" javaType="long" jdbcType="BIGINT"/>
+        <result property="lengthUnit" column="sys_file_length_unit" javaType="string" jdbcType="VARCHAR"/>
+        <result property="type" column="sys_file_type" javaType="string" jdbcType="VARCHAR"/>
+        <result property="path" column="sys_path" javaType="string" jdbcType="VARCHAR"/>
+        <result property="uri" column="sys_file_uri" javaType="string" jdbcType="VARCHAR"/>
+        <result property="thumbnailUri" column="sys_file_thumbnail_uri" javaType="string" jdbcType="VARCHAR"/>
+        <result property="note" column="sys_file_note" javaType="string" jdbcType="VARCHAR"/>
+        <result property="location" column="sys_file_location" javaType="string" jdbcType="VARCHAR"/>
+        <result property="host" column="sys_file_host" javaType="string" jdbcType="VARCHAR"/>
+        <result property="checkType" column="sys_file_check_type" javaType="string" jdbcType="VARCHAR"/>
+        <result property="checkCode" column="sys_file_check_code" javaType="string" jdbcType="VARCHAR"/>
+        <result property="state" column="sys_file_state" javaType="int" jdbcType="INTEGER"/>
+        <result property="createTime" column="sys_file_create_date" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="sys_file_update_date" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="sqlSysFileColumns">
+		sys_file_.id AS sys_file_id,
+		sys_file_.`name` AS sys_file_name,
+		sys_file_.suffix AS sys_file_suffix,
+		sys_file_.location AS sys_file_location,
+		sys_file_.host AS sys_file_host,
+		sys_file_.version AS sys_file_version,
+		sys_file_.code AS sys_file_code,
+		sys_file_.`key` AS sys_file_key,
+		sys_file_.`length` AS sys_file_length,
+		sys_file_.length_unit AS sys_file_length_unit,
+		sys_file_.`type` AS sys_file_type,
+		sys_file_.path AS sys_path,
+		sys_file_.uri AS sys_file_uri,
+		sys_file_.thumbnail_uri AS sys_file_thumbnail_uri,
+		sys_file_.note AS sys_file_note,
+		sys_file_.check_type AS sys_file_check_type,
+		sys_file_.check_code AS sys_file_check_code,
+		sys_file_.state AS sys_file_state,
+		sys_file_.create_time AS sys_file_create_time,
+		sys_file_.update_time AS sys_file_update_time
+	</sql>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM  t_sys_file
+        WHERE  id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <delete id="deleteByRequest" parameterType="map">
+        DELETE FROM t_sys_file
+        <where>
+            <if test="id != null">id = #{id}</if>
+            <if test="version != null">version = #{version}</if>
+            <if test="code != null and code != ''">code = #{code}</if>
+            <if test="name != null and name != ''">`name` = #{name}</if>
+            <if test="suffix != null and suffix != ''">suffix = #{suffix}</if>
+        </where>
+    </delete>
+
+    <select id="get" parameterType="long" resultMap="sysFile">
+        SELECT
+        <include refid="sqlSysFileColumns"/>
+        FROM t_sys_file sys_file_
+        WHERE sys_file_.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="getByCode" parameterType="string" resultMap="sysFile">
+        SELECT
+        <include refid="sqlSysFileColumns"/>
+        FROM t_sys_file sys_file_
+        WHERE
+        sys_file_.code = #{code,jdbcType=VARCHAR}
+        or sys_file_.id = #{code}
+        or sys_file_.name= #{code}
+    </select>
+
+    <select id="getByRequest" parameterType="string" resultMap="sysFile">
+        SELECT
+        <include refid="sqlSysFileColumns"/>
+        FROM t_sys_file sys_file_
+        WHERE
+        <if test="uri != null and uri != ''">uri = #{uri,jdbcType=VARCHAR}</if>
+        <if test="code != null and code != ''">code = #{code}</if>
+    </select>
+
+    <select id="list" resultMap="sysFile">
+        SELECT
+        <include refid="sqlSysFileColumns"/>
+        FROM t_sys_file sys_file_
+        order by id desc
+    </select>
+
+    <select id="count" resultType="int">
+       SELECT	count( * )FROM	`t_sys_file`
+    </select>
+
+    <select id="listByRequest" parameterType="com.arc.core.model.request.system.file.SysFileRequest" resultMap="sysFile">
+        SELECT
+        <include refid="sqlSysFileColumns"/>
+        FROM t_sys_file sys_file_
+        <where>
+            <if test="name != null and name != ''">sys_file_.name LIKE CONCAT('%',#{name},'%')</if>
+        </where>
+        order by create_time DESC
+
+    </select>
+
+    <insert id="save" parameterType="com.arc.core.model.domain.system.SysFile" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_sys_file (
+			name,
+			suffix,
+			version,
+			code,
+			`key`,
+			`length`,
+			length_unit,
+			path,
+			location,
+			host,
+			uri,
+			thumbnail_uri,
+			note,
+			check_type,
+			`type`,
+			check_code,
+			state,
+			create_time,
+			update_time
+		)
+        VALUES (
+			#{name,jdbcType=VARCHAR},
+			#{suffix,jdbcType=VARCHAR},
+			#{version,jdbcType=INTEGER},
+			#{code,jdbcType=VARCHAR},
+			#{key,jdbcType=VARCHAR},
+			#{length,jdbcType=BIGINT},
+			#{lengthUnit},
+			#{path},
+			#{location},
+			#{host},
+			#{uri,jdbcType=VARCHAR},
+			#{thumbnailUri},
+			#{note,jdbcType=VARCHAR},
+			#{checkType,jdbcType=VARCHAR},
+			#{type},
+			#{checkCode,jdbcType=VARCHAR},
+			#{state,jdbcType=INTEGER},
+			now(),
+			now()
+		)
+	</insert>
+
+    <update id="update" parameterType="com.arc.core.model.domain.system.SysFile">
+        UPDATE t_sys_file
+        <set>
+            <if test="name != null and name != ''">`name` = #{name,jdbcType=VARCHAR},</if>
+            <if test="suffix != null and suffix != ''">suffix = #{suffix,jdbcType=VARCHAR},</if>
+            <if test="version != null">version = #{version,jdbcType=INTEGER},</if>
+            <if test="code != null and code != ''">code = #{code,jdbcType=VARCHAR},</if>
+            <if test="key != null and key != ''">`key` = #{key,jdbcType=VARCHAR},</if>
+            <if test="length != null">`length` = #{length,jdbcType=BIGINT},</if>
+            <if test="lengthUnit != null and lengthUnit!=''">length_unit = #{lengthUnit},</if>
+            <if test="path != null and path!=''">path = #{path},</if>
+            <if test="location != null and path!=''">location = #{location},</if>
+            <if test="host != null and path!=''">host = #{host},</if>
+            <if test="uri != null and uri != ''">uri = #{uri,jdbcType=VARCHAR},</if>
+            <if test="thumbnailUri != null and thumbnailUri != ''">thumbnail_uri = #{thumbnailUri},</if>
+            <if test="note != null and note != ''">note = #{note,jdbcType=VARCHAR},</if>
+            <if test="checkType != null and checkType != ''">check_type = #{checkType,jdbcType=VARCHAR},</if>
+            <if test="type != null and type != ''">`type` = #{type},</if>
+            <if test="checkCode != null and checkCode != ''">check_code = #{checkCode,jdbcType=VARCHAR},</if>
+            <if test="state != null">state = #{state,jdbcType=INTEGER},</if>
+            <if test="createTime != null">create_time = #{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateTime != null">update_time = #{updateTime,jdbcType=TIMESTAMP},</if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

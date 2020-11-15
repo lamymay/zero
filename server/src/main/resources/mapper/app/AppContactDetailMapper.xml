@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.app.AppContactDetailMapper">
+    <resultMap id="appContactDetail" type="com.arc.core.model.domain.app.AppContactDetail">
+        <id property="id" column="app_contact_detail_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="contactId" column="app_contact_detail_contact_id" javaType="int" jdbcType="INTEGER"/>
+        <result property="type" column="app_contact_detail_type" javaType="string" jdbcType="VARCHAR"/>
+        <result property="value" column="app_contact_detail_value" javaType="string" jdbcType="VARCHAR"/>
+        <result property="alias" column="app_contact_detail_alias" javaType="string" jdbcType="VARCHAR"/>
+        <result property="createTime" column="app_contact_detail_create_time" javaType="java.time.LocalDateTime"
+                jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="app_contact_detail_update_time" javaType="java.time.LocalDateTime"
+                jdbcType="TIMESTAMP"/>
+
+    </resultMap>
+
+    <sql id="sqlAppContactDetailColumns">
+		app_contact_detail_.id AS app_contact_detail_id,
+		app_contact_detail_.contact_id AS app_contact_detail_contact_id,
+		app_contact_detail_.type AS app_contact_detail_type,
+
+		app_contact_detail_.value AS app_contact_detail_value,
+		app_contact_detail_.alias AS app_contact_detail_alias,
+
+		app_contact_detail_.create_time AS app_contact_detail_create_time,
+		app_contact_detail_.update_time AS app_contact_detail_update_time
+	</sql>
+
+    <select id="get" parameterType="long" resultMap="appContactDetail">
+        SELECT
+        <include refid="sqlAppContactDetailColumns"/>
+        FROM t_app_contact_detail
+        WHERE id = #{id}
+    </select>
+
+    <select id="listByContactId" parameterType="long" resultMap="appContactDetail">
+        SELECT
+        <include refid="sqlAppContactDetailColumns"/>
+        FROM t_app_contact_detail
+        WHERE contact_id = #{contactId}
+    </select>
+
+    <select id="list" parameterType="com.arc.core.model.domain.app.AppContactDetail" resultMap="appContactDetail">
+        SELECT
+        <include refid="sqlAppContactDetailColumns"/>
+        FROM t_app_contact_detail
+        <where>
+            <if test="contactId != null">contact_id = #{contactId}</if>
+        </where>
+    </select>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM   t_app_contact_detail
+        WHERE  id = #{id}
+    </delete>
+
+    <delete id="deleteByContactId" parameterType="long">
+        DELETE FROM   t_app_contact_detail
+        WHERE  contact_id = #{contactId}
+    </delete>
+
+    <delete id="deleteBatch">
+        DELETE FROM t_app_contact_detail
+        WHERE id in
+        (
+        <foreach collection="ids" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+    <delete id="deleteBatchByContactIds">
+        DELETE FROM t_app_contact_detail
+        WHERE contact_id in
+        (
+        <foreach collection="contactIds" item="item" index="index" separator=",">
+            #{item}
+        </foreach>
+        )
+    </delete>
+
+    <insert id="save" parameterType="com.arc.core.model.domain.app.AppContactDetail" useGeneratedKeys="true"
+            keyProperty="id">
+		INSERT INTO t_app_contact_detail (
+			contact_id,
+			`type`,
+			`value`,
+			alias,
+			create_time
+		)
+        VALUES (
+			#{contactId},
+			#{type},
+			#{value},
+			#{alias},
+			now()
+		)
+	</insert>
+
+    <!--批量保存-->
+    <insert id="saveBatch" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_app_contact_detail (
+        contact_id,
+        `type`,
+        `value`,
+        alias,
+        create_time
+        )
+        VALUES
+        <foreach collection="contactDetails" item="item" index="index" separator=",">
+            (
+            #{item.contactId},
+            #{item.type},
+            #{item.value},
+            #{item.alias},
+            now()
+            )
+        </foreach>
+    </insert>
+
+    <update id="update" parameterType="com.arc.core.model.domain.app.AppContactDetail">
+        UPDATE t_app_contact_detail
+        <set>
+            <if test="value != null and value != ''">`value` = #{value},</if>
+            <if test="type != null and type != ''">`type` = #{type},</if>
+            <if test="alias != null and alias != ''">alias =#{alias},</if>
+            <if test="updateTime != null">update_time = now()</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

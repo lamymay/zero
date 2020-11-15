@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.blog.BlogArticleMapper">
+    <resultMap id="blogArticle" type="com.arc.core.model.domain.blog.BlogArticle">
+        <id property="id" column="blog_article_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="authorId" column="blog_article_author_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="tagId" column="blog_article_tag_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="category" column="blog_article_category" javaType="long" jdbcType="BIGINT"/>
+        <result property="status" column="blog_article_status" javaType="int" jdbcType="INTEGER"/>
+        <result property="version" column="blog_article_version" javaType="int" jdbcType="INTEGER"/>
+        <result property="sortWeight" column="blog_article_sort_weight" javaType="int" jdbcType="INTEGER"/>
+        <result property="title" column="blog_article_title" javaType="string" jdbcType="VARCHAR"/>
+        <result property="description" column="blog_article_description" javaType="string" jdbcType="VARCHAR"/>
+        <result property="content" column="blog_article_content" javaType="string" jdbcType="VARCHAR"/>
+        <result property="publishDate" column="blog_article_publish_date" javaType="java.util.Date"
+                jdbcType="TIMESTAMP"/>
+        <result property="createDate" column="blog_article_create_date" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="blog_article_update_date" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="sqlBlogArticleColumns">
+		blog_article_.id AS blog_article_id,
+		blog_article_.author_id AS blog_article_author_id,
+		blog_article_.tag_id AS blog_article_tag_id,
+		blog_article_.category AS blog_article_category,
+		blog_article_.status AS blog_article_status,
+		blog_article_.version AS blog_article_version,
+		blog_article_.sort_weight AS blog_article_sort_weight,
+		blog_article_.title AS blog_article_title,
+		blog_article_.description AS blog_article_description,
+		blog_article_.content AS blog_article_content,
+		blog_article_.publish_date AS blog_article_publish_date,
+		blog_article_.create_date AS blog_article_create_date,
+		blog_article_.update_date AS blog_article_update_date
+	</sql>
+
+    <delete id="delete" parameterType="long">
+        DELETE FROM  t_blog_article
+        WHERE  id = #{id,jdbcType=BIGINT}
+    </delete>
+
+    <select id="get" parameterType="long" resultMap="blogArticle">
+        SELECT
+        <include refid="sqlBlogArticleColumns"/>
+        FROM t_blog_article blog_article_
+        WHERE blog_article_.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="list" resultMap="blogArticle">
+        SELECT
+        <include refid="sqlBlogArticleColumns"/>
+        FROM t_blog_article blog_article_
+    </select>
+
+    <select id="listBlogByUserId" parameterType="long" resultMap="blogArticle">
+        SELECT
+        <include refid="sqlBlogArticleColumns"/>
+        FROM t_blog_article blog_article_
+        where author_id =#{authorId}
+    </select>
+
+    <select id="listTimeLine" parameterType="long" resultMap="blogArticle">
+        SELECT
+        <include refid="sqlBlogArticleColumns"/>
+        FROM t_blog_article blog_article_
+        where author_id =#{authorId}
+        and status !=0
+        order by sort_weight ASC
+    </select>
+
+
+    <insert id="save" parameterType="com.arc.core.model.domain.blog.BlogArticle" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_blog_article (
+			author_id,
+			tag_id,
+			category,
+			status,
+			version,
+			sort_weight,
+			title,
+			description,
+			content,
+			publish_date,
+			create_date,
+			update_date
+		)
+        VALUES (
+			#{authorId,jdbcType=BIGINT},
+			#{tagId,jdbcType=BIGINT},
+			#{category,jdbcType=BIGINT},
+			#{status,jdbcType=INTEGER},
+			#{sortWeight,jdbcType=INTEGER},
+			#{version,jdbcType=INTEGER},
+			#{title,jdbcType=VARCHAR},
+			#{description,jdbcType=VARCHAR},
+			#{content,jdbcType=VARCHAR},
+			#{publishDate,jdbcType=TIMESTAMP},
+			#{createDate,jdbcType=TIMESTAMP},
+			#{updateDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.arc.core.model.domain.blog.BlogArticle">
+        UPDATE t_blog_article
+        <set>
+            <if test="authorId != null">author_id = #{authorId,jdbcType=BIGINT},</if>
+            <if test="tagId != null">tag_id = #{tagId,jdbcType=BIGINT},</if>
+            <if test="category != null">category = #{category,jdbcType=BIGINT},</if>
+            <if test="status != null">status = #{status,jdbcType=INTEGER},</if>
+            <if test="title != null and title != ''">title = #{title,jdbcType=VARCHAR},</if>
+            <if test="description != null and description != ''">description = #{description,jdbcType=VARCHAR},</if>
+            <if test="content != null and content != ''">content = #{content,jdbcType=VARCHAR},</if>
+            <if test="publishDate != null">publish_date = #{publishDate,jdbcType=TIMESTAMP},</if>
+            <if test="createDate != null">create_date = #{createDate,jdbcType=TIMESTAMP},</if>
+            <if test="updateDate != null">update_date = #{updateDate,jdbcType=TIMESTAMP},</if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>

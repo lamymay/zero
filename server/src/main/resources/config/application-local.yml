@@ -1,0 +1,41 @@
+server:
+  port: 8000
+spring:
+  servlet:
+    multipart:
+      max-file-size: 102400MB
+      max-request-size: 102400MB
+  profiles: local
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    virtual-host: /
+    # 消息发送至exchange callback           spring.rabbitmq.publisher-confirms=true
+    # 消息发送至queue 失败才callback      spring.rabbitmq.publisher-returns=true
+    # 消费消息手动删除                                spring.rabbitmq.listener.simple.acknowledge-mode=manual
+  #    publisher-confirms: true
+  #    publisher-returns: true
+  #    listener:
+  #      simple:
+  #        acknowledge-mode: manual
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/zero?useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true&useSSL=false&serverTimezone=GMT%2B8
+    username: root
+    password: admin
+    hikari:
+      max-lifetime: 1765000
+      maximum-pool-size: 15
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password:
+    database: 1
+#swagger:
+#  print-init: true
+#  enabled: true
+#  docket:
+#    base-package:  com.arc.zero.controller
+

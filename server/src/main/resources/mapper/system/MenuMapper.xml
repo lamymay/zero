@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.system.MenuMapper">
+    <resultMap id="menu" type="com.arc.core.model.domain.system.SysMenu">
+        <id property="id" column="m_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="code" column="m_code" javaType="string" jdbcType="VARCHAR"/>
+        <result property="name" column="m_name" javaType="string" jdbcType="VARCHAR"/>
+        <result property="nameEnglish" column="m_name_english" javaType="string" jdbcType="VARCHAR"/>
+        <result property="sort" column="m_sort" jdbcType="SMALLINT"/>
+        <result property="parentId" column="m_parent_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="level" column="m_level"/>
+        <result property="state" column="m_state"/>
+        <result property="url" column="m_url" javaType="string" jdbcType="VARCHAR"/>
+        <result property="icon" column="m_icon" javaType="string" jdbcType="VARCHAR"/>
+        <result property="note" column="m_note" javaType="string" jdbcType="VARCHAR"/>
+        <result property="systemId" column="m_system_id" javaType="java.lang.Integer" jdbcType="INTEGER"/>
+        <result property="createDate" column="m_create_date" javaType="java.util.Date" jdbcType="TIMESTAMP"/>
+        <result property="updateDate" column="m_update_date"/>
+    </resultMap>
+
+    <sql id="sqlMenuColumns">
+		m_.id AS m_id,
+		m_.code AS m_code,
+		m_.`name` AS m_name,
+		m_.name_english AS m_name_english,
+		m_.sort AS m_sort,
+		m_.parent_id AS m_parent_id,
+		m_.`level` AS m_level,
+		m_.state AS m_state,
+		m_.url AS m_url,
+		m_.icon AS m_icon,
+		m_.note AS m_note,
+		m_.system_id AS m_system_id,
+		m_.create_date AS m_create_date,
+		m_.update_date AS m_update_date
+	</sql>
+
+    <delete id="delete" parameterType="long">
+        DELETE sys_menu WHERE id =#{id}
+    </delete>
+
+    <!--逻辑删除-->
+    <update id="deleteLogical" parameterType="long">
+        UPDATE sys_menu   `state` = 0     WHERE id = #{id}
+    </update>
+
+    <select id="get" parameterType="long" resultMap="menu">
+        SELECT
+        <include refid="sqlMenuColumns"/>
+        FROM sys_menu m_
+        WHERE m_.id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <select id="listMenu" resultMap="menu">
+        SELECT
+        <include refid="sqlMenuColumns"/>
+        FROM sys_menu m_
+        WHERE m_.system_id = #{systemId}
+        AND m_.state !=0
+        <if test="level != null ">AND m_.level=#{level}</if>
+        ORDER BY m_.sort ASC
+    </select>
+
+    <select id="list" resultMap="menu">
+        SELECT
+        <include refid="sqlMenuColumns"/>
+        FROM sys_menu m_
+        WHERE m_.system_id =4
+        ORDER BY m_.sort ASC
+    </select>
+
+    <select id="listMenuBySystemIdAndParentId" resultMap="menu">
+        SELECT
+        <include refid="sqlMenuColumns"/>
+        FROM sys_menu m_
+        WHERE m_.parent_id = #{parentId}
+        and m_.system_id = #{systemId}
+        ORDER BY m_.sort ASC
+    </select>
+
+    <insert id="save" parameterType="com.arc.core.model.domain.system.SysMenu" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO sys_menu (
+			code,
+			`name`,
+			name_english,
+			parent_id,
+			sort,
+			`level`,
+			state,
+			url,
+			icon,
+			note,
+			system_id,
+			create_date,
+			update_date
+		)
+        VALUES (
+			#{code,jdbcType=VARCHAR},
+			#{name,jdbcType=VARCHAR},
+			#{nameEnglish,jdbcType=VARCHAR},
+			#{parentId,jdbcType=BIGINT},
+			#{sort},
+			#{level},
+			#{state},
+			#{url,jdbcType=VARCHAR},
+			#{icon,jdbcType=VARCHAR},
+			#{note,jdbcType=VARCHAR},
+			#{systemId,jdbcType=BIGINT},
+			#{createDate,jdbcType=TIMESTAMP},
+			#{updateDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+    <insert id="saveBatch" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_menu (
+        code, `name`, name_english,
+        parent_id, `sort`, `level`,
+        `state`, url, icon,
+        note, system_id, update_date )
+        VALUES
+        <foreach collection="menus" item="item" index="index" separator=",">
+            ( #{item.code},#{item.name},#{item.nameEnglish},
+            #{item.parentId},#{item.sort},#{item.level},
+            #{item.state},#{item.url},#{item.icon},
+            #{item.note},#{item.systemId}, now())
+        </foreach>
+    </insert>
+
+
+    <update id="update" parameterType="com.arc.core.model.domain.system.SysMenu">
+        UPDATE sys_menu
+        <set>
+            <if test="code != null and code != ''">code = #{code,jdbcType=VARCHAR},</if>
+            <if test="name != null and name != ''">`name` = #{name,jdbcType=VARCHAR},</if>
+            <if test="nameEnglish != null and nameEnglish != ''">name_english = #{nameEnglish,jdbcType=VARCHAR},</if>
+            <if test="parentId != null">parent_id = #{parentId,jdbcType=BIGINT},</if>
+            <if test="sort != null">sort = #{sort},</if>
+            <if test="level != null">`level` = #{level},</if>
+            <if test="state != null">`state` = #{state},</if>
+            <if test="url != null and url != ''">url = #{url,jdbcType=VARCHAR},</if>
+            <if test="icon != null and icon != ''">icon = #{icon,jdbcType=VARCHAR},</if>
+            <if test="note != null and note != ''">note = #{note,jdbcType=VARCHAR},</if>
+            <if test="systemId != null">system_id = #{systemId,jdbcType=BIGINT},</if>
+            <if test="createDate != null">create_date = #{createDate,jdbcType=TIMESTAMP},</if>
+            <if test="updateDate != null">update_date = #{updateDate,jdbcType=TIMESTAMP},</if>
+        </set>
+        WHERE id = #{id,jdbcType=BIGINT}
+    </update>
+
+</mapper>
