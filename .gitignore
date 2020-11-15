@@ -1,2 +1,19 @@
 # Project exclude paths
+!.mvn/wrapper/maven-wrapper.jar
+
+### IntelliJ IDEA ###
+*.iws
+*.iml
+*.ipr
 /server/target/
+
+zero.iml
+.idea
+target/
+
+### personal config ###
+#*23.yml
+*.bak
+*.log
+
+log/
