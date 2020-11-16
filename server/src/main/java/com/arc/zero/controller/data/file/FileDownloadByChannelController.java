@@ -37,9 +37,9 @@ public class FileDownloadByChannelController {
 
         OutputStream os = null;
         try {
-            //File sourceFile = ResourceUtils.getFile("classpath:static/image/IMG_3840x2160.png");
+            //File sourceFile = ResourceUtils.getFile("classpath:static/image/IMG_1.png");
             //InputStream inputStream = Thread.currentThread().getContextClassLoader().getResourceAsStream("excleTemplate/test.xlsx");
-            File sourceFile = new File("./IMG_3840x2160.png");
+            File sourceFile = new File("./IMG_1.png");
             // 取得输出流
             os = response.getOutputStream();
             String contentType = Files.probeContentType(Paths.get(sourceFile.getAbsolutePath()));
