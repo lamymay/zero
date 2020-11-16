@@ -34,7 +34,6 @@ public class FileDownloadByChannelController {
     @GetMapping("/download-test")
     @Note("v2-文件下载-测试")
     public static void downloadFileTest(HttpServletResponse response) {
-
         OutputStream os = null;
         try {
             //File sourceFile = ResourceUtils.getFile("classpath:static/image/IMG_1.png");
