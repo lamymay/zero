@@ -25,8 +25,32 @@ public class TestCreateAt {
 
         fun6();
         fun7();
+        boolean sameTime = isSameTime(new Date(), new Date());
+        System.out.println();
 
     }
+
+
+    private static boolean isSameTime(Date awardTime, Date now) {
+        if (awardTime == null || now == null) {
+            return false;
+        }
+        SimpleDateFormat monthAndDayFormat = new SimpleDateFormat("HH:mm");
+
+        String pastString = monthAndDayFormat.format(awardTime);
+        String nowString = monthAndDayFormat.format(now);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE, 1);
+
+        //todo
+        return pastString.equals(nowString);
+    }
+
+
+
+
+
 
     private static void fun7() {
         //   "id":1623188001,
