@@ -28,9 +28,9 @@ spring:
     #爆红不要紧张，没有问题的只是编辑工具不能识别造成的，本身是正确的,驱动可以不必写，url中可以体现，代码会自动判断的
     #    driver-class-name: com.mysql.cj.jdbc.Driver   #8.X mysql
     #    driver-class-name:  com.mysql.jdbc.Driver   #5.X mysql
-    url: jdbc:mysql://104.160.45.23:3306/test?useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true&useSSL=false&serverTimezone=GMT%2B8
-    username: test
-    password: mayher#test1234Z!
+    url: jdbc:mysql://104.160.45.23:3306/zero?useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true&useSSL=false&serverTimezone=GMT%2B8
+    username: deploy
+    password: mayher127#deployZ!
 #    url: jdbc:mysql://127.0.0.1:3306/zero?useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true&useSSL=false&serverTimezone=GMT%2B8
 #    username: root
 #    password: admin

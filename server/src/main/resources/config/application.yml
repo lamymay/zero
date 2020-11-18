@@ -7,7 +7,7 @@ spring:
   application:
     name: zero-server
   profiles:
-    active: self
+    active: 23
   resources:
     add-mappings: false
     static-locations: classpath:/static/,classpath:/templates/index/
