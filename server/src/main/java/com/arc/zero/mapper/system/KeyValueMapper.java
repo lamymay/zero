@@ -2,6 +2,7 @@ package com.arc.zero.mapper.system;
 
 import com.arc.core.model.domain.system.KeyValue;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -20,7 +21,7 @@ public interface KeyValueMapper extends BaseMapper<KeyValue> {
 
     List<KeyValue> listAll();
 
-    KeyValue getById();
+    KeyValue getById(@Param("id") Long id);
 
     /**
      * 根据类型来去一个集合

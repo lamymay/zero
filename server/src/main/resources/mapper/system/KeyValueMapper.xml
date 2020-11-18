@@ -69,6 +69,13 @@
         FROM t_kv
     </select>
 
+    <select id="getById" resultMap="keyValue">
+        SELECT
+        <include refid="sqlKeyValueColumns"/>
+        FROM t_kv
+        where  id= #{id}
+    </select>
+
     <select id="list" parameterType="com.arc.core.model.domain.system.KeyValue" resultMap="keyValue">
         SELECT
         <include refid="sqlKeyValueColumns"/>
