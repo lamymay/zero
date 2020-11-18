@@ -1,6 +1,6 @@
 package com.arc.zero.controller.data.demo;
 
-import com.arc.core.model.domain.demo.DemoDomain;
+import com.arc.core.model.domain.demo.DemoModel;
 import com.arc.core.model.vo.ResponseVo;
 import com.arc.zero.mapper.demo.DemoMapper;
 import org.springframework.web.bind.annotation.*;
@@ -22,7 +22,7 @@ public class DemoDataController {
     private DemoMapper demoMapper;
 
     @PostMapping(value = "")
-    public ResponseVo save(@RequestBody DemoDomain model) {
+    public ResponseVo save(@RequestBody DemoModel model) {
         return ResponseVo.success(demoMapper.insert(model));
     }
 

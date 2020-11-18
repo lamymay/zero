@@ -1,11 +1,11 @@
 package com.arc.zero.mapper.demo;
 
-import com.arc.core.model.domain.demo.DemoDomain;
+import com.arc.core.model.domain.demo.DemoModel;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;
 
-public interface DemoMapper extends BaseMapper<DemoDomain> {
+public interface DemoMapper extends BaseMapper<DemoModel> {
 
 //    /**
 //     * 保存一条数据并返回数据的主键
@@ -13,7 +13,7 @@ public interface DemoMapper extends BaseMapper<DemoDomain> {
 //     * @param shoppingReceipt 实体
 //     * @return 主键 PK
 //     */
-//    Long save(DemoDomain shoppingReceipt);
+//    Long save(DemoModel shoppingReceipt);
 //
 //    /**
 //    * 通过主键删除一条数据
@@ -29,7 +29,7 @@ public interface DemoMapper extends BaseMapper<DemoDomain> {
 //     * @param shoppingReceipt
 //     * @return 影响数据条数
 //     */
-//    int update(DemoDomain shoppingReceipt);
+//    int update(DemoModel shoppingReceipt);
 
     /**
      * 通过主键查询一条数据
@@ -37,14 +37,14 @@ public interface DemoMapper extends BaseMapper<DemoDomain> {
      * @param id 主键
      * @return 返回一条数据
      */
-    DemoDomain get(Long id);
+    DemoModel get(Long id);
 
     /**
      * 无条件查询全部数据
      *
      * @return 全部数据
      */
-    List<DemoDomain> list();
+    List<DemoModel> list();
 
 //    /**
 //     * 条件查询数据列表
