@@ -1,9 +1,8 @@
 package com.arc.zero.mapper.test;
 
-import java.io.Serializable;
 import java.util.Date;
 
-import com.arc.core.model.request.TestPageQuery;
+import com.arc.core.model.request.PageQuery;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -17,7 +16,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CicadaCdKeyRecordRequest extends TestPageQuery {
+public class CicadaCdKeyRecordRequest extends PageQuery {
 
 	private static final long serialVersionUID = 1L;
 

@@ -1,6 +1,6 @@
 package com.arc.zero.mapper.test;
 
-import com.arc.core.model.request.TestPageQuery;
+import com.arc.core.model.request.PageQuery;
 import com.arc.zero.mapper.TestBaseMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import lombok.Data;
@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  */
 @Data
 @ToString(callSuper = true)
-public class CicadaActivityRuleRequest extends TestPageQuery {
+public class CicadaActivityRuleRequest extends PageQuery {
 
     private static final long serialVersionUID = 1L;
 
