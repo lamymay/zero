@@ -85,8 +85,9 @@
         <include refid="sqlSysFileColumns"/>
         FROM t_sys_file sys_file_
         WHERE
-        <if test="uri != null and uri != ''">uri = #{uri,jdbcType=VARCHAR}</if>
+        <if test="id != null ">id = #{id}</if>
         <if test="code != null and code != ''">code = #{code}</if>
+        <if test="uri != null and uri != ''">uri = #{uri}</if>
     </select>
 
     <select id="list" resultMap="sysFile">
@@ -96,11 +97,9 @@
         order by id desc
     </select>
 
-    <select id="count" resultType="int">
-       SELECT	count( * )FROM	`t_sys_file`
-    </select>
 
-    <select id="listByRequest" parameterType="com.arc.core.model.request.system.file.SysFileRequest" resultMap="sysFile">
+    <select id="listByRequest" parameterType="com.arc.core.model.request.system.file.SysFileRequest"
+            resultMap="sysFile">
         SELECT
         <include refid="sqlSysFileColumns"/>
         FROM t_sys_file sys_file_
@@ -181,5 +180,26 @@
         </set>
         WHERE id = #{id,jdbcType=BIGINT}
     </update>
+
+
+    <select id="count" resultType="int">
+       SELECT	count( * )FROM	`t_sys_file`;
+    </select>
+
+    <select id="listPage" parameterType="com.arc.core.model.request.system.file.SysFileRequest" resultMap="sysFile">
+        SELECT
+        <include refid="sqlSysFileColumns"/>
+        FROM t_sys_file sys_file_
+
+        <where>
+            state=1
+            <if test="version != null ">AND sys_file_.version= #{version}</if>
+            <if test="name != null and name != ''">AND sys_file_.name LIKE CONCAT('%',#{name},'%')</if>
+        </where>
+
+        order by create_time DESC
+        limit #{start},#{end}
+
+    </select>
 
 </mapper>

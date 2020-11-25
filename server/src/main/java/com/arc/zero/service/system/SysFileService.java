@@ -1,8 +1,6 @@
 package com.arc.zero.service.system;
 
 import com.arc.core.model.domain.system.SysFile;
-import com.arc.core.model.request.system.file.FileRequest;
-import com.arc.core.model.request.system.file.SysFilePageRequest;
 import com.arc.core.model.request.system.file.SysFileRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
@@ -13,6 +11,7 @@ import java.util.Map;
 /**
  * JAVA项目是分层来写的，
  * 这是服务层，目的是处理业务，
+ * 文件记录表相关服务
  *
  * @author yechao
  * @date 2018/12/21
@@ -21,7 +20,13 @@ public interface SysFileService {
 
     Long save(SysFile sysFile);
 
-    Boolean delete(Long id);
+    Boolean deleteById(Long id);
+
+    int deleteByCode(String code);
+
+    int deleteByRequest(Map<String, Object> map);
+
+    void deleteByRequest(SysFileRequest request, boolean cleanDisk);
 
     int update(SysFile sysFile);
 
@@ -37,26 +42,34 @@ public interface SysFileService {
      */
     String writeFileToDiskAndRecord(MultipartFile file, String tempDir);
 
-    SysFile getByCode(String code);
-
-    SysFile getByIdOrCode(String idOrCode);
-
-    SysFile getByRequest(SysFileRequest request);
 
     List<SysFile> list();
 
     List<SysFile> list(SysFileRequest request);
 
-    //todo  listPgae
-    Page<SysFile> listPgae(SysFilePageRequest request);
+
+    int saveBatch(List<SysFile> sysFileList);
 
     SysFile getById(Long id);
 
-    int deleteByCode(String code);
+    SysFile getByCode(String code);
 
-    int deleteByRequest(Map<String, Object> map);
+    /**
+     * 查询一条数据
+     *
+     * @param request 请求参数封装
+     * @return db中的一条记录
+     */
+    SysFile getByRequest(SysFileRequest request);
 
-    void deleteByRequest(FileRequest request);
+    SysFile getByIdOrCode(String idOrCode);
 
-    int saveBatch(List<SysFile> sysFileList);
+    /**
+     * 分页查询
+     *
+     * @param request 请求参数封装
+     * @return 分页对象
+     */
+    Page<SysFile> listPage(SysFileRequest request);
+
 }

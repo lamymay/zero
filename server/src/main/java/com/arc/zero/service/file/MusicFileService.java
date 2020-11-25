@@ -12,5 +12,5 @@ public interface MusicFileService {
 
     Integer init(Map<String, Object> map);
 
-    Boolean deleteByIdOrCode(String idOrCode);
+    Boolean deleteByCode(String code);
 }

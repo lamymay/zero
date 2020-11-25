@@ -57,11 +57,11 @@ public class MusicFileServiceImpl implements MusicFileService {
 
 
     @Override
-    public Boolean deleteByIdOrCode(String idOrCode) {
-        if (idOrCode == null) {
+    public Boolean deleteByCode(String code) {
+        if (code == null) {
             throw new BizException(ProjectCodeEnum.ILLEGAL_PARAMETER);
         }
-        SysFile sysFile = sysFileService.getByIdOrCode(idOrCode);
+        SysFile sysFile = sysFileService.getByCode(code);
         if (sysFile == null) {
             return false;
         }
@@ -88,6 +88,6 @@ public class MusicFileServiceImpl implements MusicFileService {
             throw new BizException(ProjectCodeEnum.FILE_OPERATE_ERROR, e);
         }
         //删除记录
-        return sysFileService.delete(sysFile.getId());
+        return sysFileService.deleteById(sysFile.getId());
     }
 }

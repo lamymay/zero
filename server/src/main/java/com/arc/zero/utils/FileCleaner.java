@@ -7,7 +7,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.validation.constraints.NotNull;
+import java.io.File;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,35 +26,35 @@ public class FileCleaner {
     private SysFileMapper sysFileMapper;
 
     @Async
-    public void clean(@NotNull Long id) {
-        //改进 查到后并发调用两个线程同时删除文件以及库中数据并发记录操作流水
-        //
-        if (id == null) {
-            return;
-        }
-        SysFile sysFile = sysFileMapper.get(id);
+    public void clean(SysFile sysFile) {
         if (sysFile == null) {
             return;
         }
-        //处理
-        //需要三个线程
 
+        //sysFile
+        String localPath = sysFile.getPath();
+        if (localPath != null) {
+            File file = new File(localPath);
+            boolean delete = file.delete();
+            log.info("文件name={},id={},code={},路径={}删除{}", sysFile.getName(), sysFile.getCode(), sysFile.getPath(), (delete ? "成功" : "失败"));
+        }
 
-//        Vector
-//        ArrayList;
-//        HashMap
-//        EnumSet
-//        Properties
-
-//        Iterable
     }
 
     public static void main(String[] args) {
+        //改进 查到后并发调用两个线程同时删除文件以及库中数据并发记录操作流水
+        //处理
+        //        Vector
+        //        ArrayList;
+        //        HashMap
+        //        EnumSet
+        //        Properties
+        //        Iterable
         Set<String> set = new HashSet();
         set.add("hello world");
         boolean a = set.add("hello 冰湖一角");
         boolean b = set.add("hello 冰湖一角");
-        System.out.println(a+"--"+b);
+        System.out.println(a + "--" + b);
         System.out.println("集合中元素个数：" + set.size());
         System.out.println("集合中元素为：" + set.toString());
     }

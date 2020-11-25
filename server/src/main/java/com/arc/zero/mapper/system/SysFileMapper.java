@@ -31,6 +31,7 @@ public interface SysFileMapper extends BaseMapper<SysFile> {
 
     int deleteByRequest(Map<String, Object> map);
 
-    int count();
+    int count(SysFileRequest request);
 
+    List<SysFile> listPage(SysFileRequest request);
 }

@@ -1,8 +1,7 @@
 package com.arc.zero.service.system.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.arc.core.model.domain.system.SysFile;
-import com.arc.core.model.request.system.file.FileRequest;
-import com.arc.core.model.request.system.file.SysFilePageRequest;
 import com.arc.core.model.request.system.file.SysFileRequest;
 import com.arc.utils.file.FileUtil;
 import com.arc.zero.mapper.system.SysFileMapper;
@@ -21,10 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author yechao
@@ -93,9 +89,38 @@ public class SysFileServiceImpl implements SysFileService {
     }
 
     @Override
-    public Boolean delete(Long id) {
+    public Boolean deleteById(Long id) {
         return sysFileMapper.delete(id) != 0;
     }
+
+    @Override
+    public int deleteByCode(String code) {
+        Map<String, Object> map = new HashMap<>();
+        map.put("code", code);
+        return deleteByRequest(map);
+    }
+
+    @Override
+    public int deleteByRequest(Map<String, Object> map) {
+        return sysFileMapper.deleteByRequest(map);
+    }
+
+    @Override
+    public void deleteByRequest(SysFileRequest request, boolean cleanDisk) {
+        //删除数据库记录
+        // 删除磁盘上文件
+
+        //两种方案：
+        // 1、立即删除--先查然后在删除文件--最后删除表中数据----->改进 查到后并发调用两个线程同时删除文件以及库中数据并发记录操作流水
+        // 2、update表中数据的标识后、由其他方法异步删除
+        if (cleanDisk) {
+            SysFile sysFile = getByRequest(request);
+            concurrencyClean(sysFile);
+        }
+
+//        int delete = sysFileMapper.delete  (request.getId());
+    }
+
 
     @Override
     public int update(SysFile sysFile) {
@@ -252,10 +277,6 @@ public class SysFileServiceImpl implements SysFileService {
         return sysFile;
     }
 
-    @Override
-    public SysFile getByRequest(SysFileRequest request) {
-        return sysFileMapper.getByRequest(request);
-    }
 
     @Override
     public List<SysFile> list(SysFileRequest request) {
@@ -263,53 +284,16 @@ public class SysFileServiceImpl implements SysFileService {
     }
 
     @Override
-    public Page<SysFile> listPgae(SysFilePageRequest request) {
-        List<SysFile> list = sysFileMapper.list();
-        int total = sysFileMapper.count();
-        Pageable pageable = PageRequest.of(request.getCurrentPage(), request.getPageSize());
-
-        PageImpl<SysFile> sysFiles = new PageImpl<>(list, pageable, total);
-        //  todo 修正分页数据的封装    PageArc pageArc = new PageArc(request.getCurrentPage(), total, list);
-        return sysFiles;
-    }
-
-    @Override
     public SysFile getById(Long id) {
         return sysFileMapper.get(id);
     }
 
-    @Override
-    public int deleteByCode(String code) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("code", code);
-        return deleteByRequest(map);
-    }
-
-    @Override
-    public int deleteByRequest(Map<String, Object> map) {
-        return sysFileMapper.deleteByRequest(map);
-    }
-
-
-    @Override
-    public void deleteByRequest(FileRequest request) {
-        //删除数据库记录
-        // 删除磁盘上文件
-
-        //两种方案：
-        // 1、立即删除--先查然后在删除文件--最后删除表中数据----->改进 查到后并发调用两个线程同时删除文件以及库中数据并发记录操作流水
-        // 2、update表中数据的标识后、由其他方法异步删除
-        Long id = request.getId();
-        concurrencyClean(id);
-
-//        int delete = sysFileMapper.delete  (request.getId());
-    }
 
     @Autowired
     FileCleaner fileCleaner;
 
-    private void concurrencyClean(Long id) {
-        fileCleaner.clean(id);
+    private void concurrencyClean(SysFile sysFile) {
+        fileCleaner.clean(sysFile);
     }
 
 
@@ -356,4 +340,42 @@ public class SysFileServiceImpl implements SysFileService {
         System.out.println(code);
     }
 
+
+    /**
+     * 查询一条数据
+     *
+     * @param request 请求参数封装
+     * @return db中的一条记录
+     */
+    @Override
+    public SysFile getByRequest(SysFileRequest request) {
+        return sysFileMapper.getByRequest(request);
+    }
+
+
+    @Override
+    public Page<SysFile> listPage(SysFileRequest request) {
+        int total = sysFileMapper.count(request);
+        Pageable pageable = PageRequest.of(request.getCurrentPage(), request.getPageSize());
+        List<SysFile> records = Collections.emptyList();
+        if (total > 0) {
+//            int currentPage = request.getCurrentPage() < 1 ? 1 : request.getCurrentPage();
+//            int pageSize = request.getPageSize();
+//            request.setStart((currentPage - 1) * pageSize);
+//            request.setEnd(currentPage * pageSize);
+            records = sysFileMapper.listPage(request);
+        }
+        PageImpl<SysFile> page = new PageImpl<>(records, pageable, total);
+        log.info("文件上传记录分页查询,返回的分页数据模型={}", JSON.toJSONString(page));
+        return page;
+
+        //  todo 修正分页数据的封装    PageArc pageArc = new PageArc(request.getCurrentPage(), total, list);
+    }
+
 }
+
+
+//        int pageSize = request.getPageSize();
+//        int pageNumber = request.getPageNumber();
+//        long offset = request.getOffset();
+//

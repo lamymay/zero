@@ -1,7 +1,12 @@
 package com.arc.zero.controller.data.file;
 
 import com.arc.core.config.annotations.Note;
+import com.arc.core.model.domain.system.SysFile;
+import com.arc.core.model.request.system.file.SysFileRequest;
+import com.arc.utils.Assert;
+import com.arc.zero.service.system.SysFileService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -25,6 +30,12 @@ import java.nio.file.StandardCopyOption;
 @RestController
 @RequestMapping({"/v3/file"})
 public class FileDownloadByChannelController {
+
+    /**
+     *文件记录表相关服务
+     */
+    @Autowired
+    private SysFileService sysFileService;
 
     /**
      * //http://192.168.2.103:8002/zero/v3/file?path"H:/bcdboot开机.txt"
@@ -69,13 +80,27 @@ public class FileDownloadByChannelController {
     //---------
 
     @GetMapping("/id/{id}")
-    public void fileDownloadById(@PathVariable("id") String id, HttpServletResponse response) throws Exception {
-        // fileDownloadByIdOrCode(id, response);
+    public void fileDownloadById(@PathVariable("id") Long id, HttpServletResponse response) throws Exception {
+        SysFileRequest req = new SysFileRequest(id);
+        fileDownload(req, response);
     }
 
     @GetMapping("/code/{code}")
     public void fileDownloadByCode(@PathVariable("code") String code, HttpServletResponse response) {
-        //fileDownloadByIdOrCode(code, response);
+        SysFileRequest req = new SysFileRequest(code);
+        fileDownload(req, response);
+    }
+
+    /**
+     * 文件下载服务
+     * @param req 请求参数目的是去查询一个文件
+     * @param response 返回流
+     */
+    private void fileDownload(SysFileRequest req, HttpServletResponse response) {
+        Assert.notNull(req);
+        SysFile dbFile = sysFileService.getByRequest(req);
+        Assert.notNull(dbFile);
+
     }
 
 

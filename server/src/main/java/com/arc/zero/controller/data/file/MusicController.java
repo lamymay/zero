@@ -67,7 +67,7 @@ public class MusicController {
     //todo 测试两种方法是否有效
     @RequestMapping(value = "/delete/{code}", method = {RequestMethod.DELETE, RequestMethod.GET})
     public ResponseVo deleteByIdOrCode(@PathVariable String code) {
-        return ResponseVo.success(musicFileService.deleteByIdOrCode(code));
+        return ResponseVo.success(musicFileService.deleteByCode(code));
     }
 
 
