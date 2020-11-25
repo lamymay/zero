@@ -4,9 +4,9 @@ import com.arc.core.model.domain.system.SysFile;
 import com.arc.core.model.request.system.file.FileRequest;
 import com.arc.core.model.request.system.file.SysFilePageRequest;
 import com.arc.core.model.request.system.file.SysFileRequest;
+import com.arc.utils.file.FileUtil;
 import com.arc.zero.mapper.system.SysFileMapper;
 import com.arc.zero.service.system.SysFileService;
-import com.arc.utils.file.FileUtil;
 import com.arc.zero.utils.FileCleaner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,7 +94,7 @@ public class SysFileServiceImpl implements SysFileService {
 
     @Override
     public Boolean delete(Long id) {
-        return sysFileMapper.delete(id)!=0;
+        return sysFileMapper.delete(id) != 0;
     }
 
     @Override
@@ -257,27 +257,10 @@ public class SysFileServiceImpl implements SysFileService {
         return sysFileMapper.getByRequest(request);
     }
 
-    public static void main(String[] args) {
-        System.out.println(File.separator);
-        System.out.println("1553674217365a397a335a8c54dce9d422da32ddbbef6".length());
-        String temp = "C:\\Users\\X\\Desktop\\UP\\A\\155367377470183239d3c40fb4abebf0efd383e20d854_DSC_0007.JPG";
-        //45
-        int index = temp.lastIndexOf("\\");
-
-        String code = temp.substring(index + 1, index + 45 + 1);
-        System.out.println(code);
-    }
-
-    @Override
-    public List<SysFile> listByRequest(SysFileRequest request) {
-        return sysFileMapper.listByRequest(request);
-    }
-
     @Override
     public List<SysFile> list(SysFileRequest request) {
         return sysFileMapper.listByRequest(request);
     }
-
 
     @Override
     public Page<SysFile> listPgae(SysFilePageRequest request) {
@@ -360,4 +343,17 @@ public class SysFileServiceImpl implements SysFileService {
         }
         return sysFile;
     }
+
+
+    public static void main(String[] args) {
+        System.out.println(File.separator);
+        System.out.println("1553674217365a397a335a8c54dce9d422da32ddbbef6".length());
+        String temp = "C:\\Users\\X\\Desktop\\UP\\A\\155367377470183239d3c40fb4abebf0efd383e20d854_DSC_0007.JPG";
+        //45
+        int index = temp.lastIndexOf("\\");
+
+        String code = temp.substring(index + 1, index + 45 + 1);
+        System.out.println(code);
+    }
+
 }

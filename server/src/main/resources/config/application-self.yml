@@ -6,7 +6,7 @@ spring:
     multipart:
       max-file-size: 102400MB
       max-request-size: 102400MB
-#  profiles: self
+  profiles: self
   rabbitmq:
     host: 127.0.0.1
     port: 5672

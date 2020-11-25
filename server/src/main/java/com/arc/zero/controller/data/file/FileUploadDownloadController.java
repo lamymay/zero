@@ -35,6 +35,12 @@ public class FileUploadDownloadController {
     @Resource
     private SysFileService fileService;
 
+
+    String text =
+            "{\"prizeSmallPic\":\"https://gw.alicdn.com/tfs/TB1o38brvzO3e4jSZFxXXaP_FXa-225-225.png\",\"taskId\":\"\"}"
+            ;
+
+
     /**
      * 临时目录，注意你电脑上是否有该目录
      */

@@ -3,11 +3,14 @@ package com.arc.zero.init;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
 
 /**
  * 初始化操作
@@ -29,6 +32,8 @@ public class SystemInitializationStartup implements ApplicationListener<ContextR
 
     @Autowired
     private ApplicationContext applicationContext;
+
+
 
     @Autowired
     private Environment env;
@@ -82,7 +87,8 @@ public class SystemInitializationStartup implements ApplicationListener<ContextR
                     log.info("profile ={}", profile);
                 }
             }
-            log.info("profile ={}", System.getProperty("spring.profiles.active"));
+            log.info("激活的配置文件profile ={}", System.getProperty("spring.profiles.active"));
+
 
 
 

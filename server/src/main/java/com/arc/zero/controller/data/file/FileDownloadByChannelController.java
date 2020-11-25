@@ -27,12 +27,12 @@ import java.nio.file.StandardCopyOption;
 public class FileDownloadByChannelController {
 
     /**
-     * //http://192.168.2.103:8002/zero/v2/files?path"H:/bcdboot开机.txt"
+     * //http://192.168.2.103:8002/zero/v3/file?path"H:/bcdboot开机.txt"
+     * 104.160.45.23:8000/zero/v3/file/download-test
      *
      * @param response HttpServletResponse
      */
     @GetMapping("/download-test")
-    @Note("v2-文件下载-测试")
     public static void downloadFileTest(HttpServletResponse response) {
         OutputStream os = null;
         try {

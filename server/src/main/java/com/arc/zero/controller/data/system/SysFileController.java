@@ -1,23 +1,14 @@
 package com.arc.zero.controller.data.system;
 
-import com.arc.core.config.annotations.Note;
-import com.arc.core.enums.system.ProjectCodeEnum;
-import com.arc.core.model.domain.system.SysFile;
 import com.arc.core.model.request.system.file.SysFilePageRequest;
 import com.arc.core.model.request.system.file.SysFileRequest;
 import com.arc.core.model.vo.ResponseVo;
-import com.arc.zero.config.properties.file.FileProperties;
-import com.arc.zero.service.file.MusicFileService;
 import com.arc.zero.service.system.SysFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 文件下载测试数据库记录的相关API
@@ -30,8 +21,6 @@ import java.util.Map;
 public class SysFileController {
     @Resource
     private SysFileService fileService;
-
-
 
 
     @GetMapping("/{id}")
@@ -76,9 +65,9 @@ public class SysFileController {
     }
 
 
-    @PostMapping("/list1")
+    @PostMapping("/list")
     public ResponseEntity getByRequest(@RequestBody SysFileRequest request) {
-        return ResponseEntity.ok(ResponseVo.success(fileService.listByRequest(request)));
+        return ResponseEntity.ok(ResponseVo.success(fileService.list(request)));
     }
 
 //    /**

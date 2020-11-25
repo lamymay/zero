@@ -45,9 +45,6 @@ public interface SysFileService {
 
     List<SysFile> list();
 
-    @Deprecated
-    List<SysFile> listByRequest(SysFileRequest request);
-
     List<SysFile> list(SysFileRequest request);
 
     //todo  listPgae
