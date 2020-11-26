@@ -105,5 +105,4 @@ public class SysFileController {
     public ResponseVo page(@RequestBody SysFileRequest request) {
         return ResponseVo.success(fileService.listPage(request));
     }
-
 }
