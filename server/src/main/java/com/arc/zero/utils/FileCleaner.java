@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -57,6 +59,19 @@ public class FileCleaner {
         System.out.println(a + "--" + b);
         System.out.println("集合中元素个数：" + set.size());
         System.out.println("集合中元素为：" + set.toString());
+
+                System.out.println(96/24);
+    }
+
+    private Date updateAwardTime(Date awardTime) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            String tempDateString = format.format(awardTime);
+            return format.parse(tempDateString);
+        } catch (Exception exception) {
+            log.error("夺宝后台,保存奖品异常{}", exception);
+            throw new RuntimeException("时间转换异常");
+        }
     }
 }
 
