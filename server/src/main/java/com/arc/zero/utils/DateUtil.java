@@ -13,6 +13,13 @@ public class DateUtil {
 
 
     public static void main(String[] args) {
+        //test1();
+        test2();
+
+
+    }
+
+    private static void test1() {
         Date date1 = null;
         Date date2 = null;
         try {
@@ -34,6 +41,30 @@ public class DateUtil {
         System.out.println(day + "天" + hour + "小时");
         System.out.println(+day + "天" + hour + "小时" + min + "分");
         System.out.println(+day + "天" + hour + "小时" + min + "分" + s + "秒");
+    }
+
+    private static void test2() {
+        Date date1 = null;
+        Date date2 = null;
+        try {
+            //1.	设置两个时间
+            date1 = new Date();
+            date2 = DateUtils.parseDate("2020-12-31 24:00:00", "yyyy-MM-dd HH:mm:ss");
+            long between = date2.getTime() - date1.getTime();
+            long seconds = between / 1000;
+            long minutes = seconds / 60;
+            long hours = minutes / 24;
+            long days = hours / 60;
+            long weeks = days / 7;
+            System.out.println("换算成seconds=" + seconds);
+            System.out.println("换算成minutes=" + minutes);
+            System.out.println("换算成hours=" + hours);
+            System.out.println("换算成days=" + days);
+            System.out.println("换算成weeks=" + weeks);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 }
