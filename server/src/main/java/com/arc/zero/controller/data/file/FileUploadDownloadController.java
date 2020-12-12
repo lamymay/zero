@@ -5,8 +5,8 @@ import com.arc.core.enums.system.ProjectCodeEnum;
 import com.arc.core.exception.BizException;
 import com.arc.core.model.domain.system.SysFile;
 import com.arc.core.model.vo.ResponseVo;
-import com.arc.zero.service.system.SysFileService;
 import com.arc.utils.file.FileUtil;
+import com.arc.zero.service.system.SysFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -34,12 +34,6 @@ public class FileUploadDownloadController {
 
     @Resource
     private SysFileService fileService;
-
-
-    String text =
-            "{\"prizeSmallPic\":\"https://gw.alicdn.com/tfs/TB1o38brvzO3e4jSZFxXXaP_FXa-225-225.png\",\"taskId\":\"\"}"
-            ;
-
 
     /**
      * 临时目录，注意你电脑上是否有该目录
@@ -80,8 +74,8 @@ public class FileUploadDownloadController {
     /**
      * 文件下载，或者说叫预览，总之就是文件传给用户
      *
-     * @param code
-     * @param response
+     * @param code     code
+     * @param response HttpServletResponse
      */
     @GetMapping("/{code}")
     @Note("文件下载")
@@ -91,10 +85,12 @@ public class FileUploadDownloadController {
         //读取文件并返回
         //获取文件在数据库中记录的信息条目
         SysFile sysFile = fileService.getByCode(code);
-        if (sysFile == null) return;
+        if (sysFile == null) {
+            return;
+        }
 
         try (InputStream inputStream = new FileInputStream(new File(sysFile.getPath()));
-             OutputStream outputStream = response.getOutputStream();) {
+             OutputStream outputStream = response.getOutputStream()) {
             if (FileUtil.isImage(sysFile.getSuffix())) {
                 response.setContentType("image/jpg");
             } else {
@@ -113,8 +109,8 @@ public class FileUploadDownloadController {
     /**
      * 文件下载，或者说叫预览，总之就是文件传给用户
      *
-     * @param id
-     * @param response
+     * @param id       id
+     * @param response HttpServletResponse
      */
     @GetMapping("/id/{id}")
     @Note("文件下载")
@@ -124,10 +120,11 @@ public class FileUploadDownloadController {
         //读取文件并返回
         //获取文件在数据库中记录的信息条目
         SysFile sysFile = fileService.get(id);
-        if (sysFile == null) return;
-
+        if (sysFile == null) {
+            return;
+        }
         try (InputStream inputStream = new FileInputStream(new File(sysFile.getPath()));
-             OutputStream outputStream = response.getOutputStream();) {
+             OutputStream outputStream = response.getOutputStream()) {
             if (FileUtil.isImage(sysFile.getSuffix())) {
                 response.setContentType("image/jpg");
             } else {
@@ -155,7 +152,7 @@ public class FileUploadDownloadController {
             //int n = false;
             long count;
             int n;
-            for (count = 0L; -1 != (n = input.read(buffer)); count += (long) n) {
+            for (count = 0L; -1 != (n = input.read(buffer)); count += n) {
                 output.write(buffer, 0, n);
             }
             return count;

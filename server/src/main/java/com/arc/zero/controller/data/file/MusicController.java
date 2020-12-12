@@ -1,7 +1,5 @@
 package com.arc.zero.controller.data.file;
 
-import com.arc.core.config.annotations.Note;
-import com.arc.core.enums.system.ProjectCodeEnum;
 import com.arc.core.model.vo.ResponseVo;
 import com.arc.zero.config.properties.file.FileProperties;
 import com.arc.zero.service.file.MusicFileService;
@@ -9,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
