@@ -11,6 +11,7 @@ public class TestCount {
         count += 1;
         count += 1;
         System.out.println(count);
+        System.out.println("cd ~/.m2/repository/"+"com.taobao.miniapp.metadata.domain".replaceAll("\\.","/"));
     }
 
 }
