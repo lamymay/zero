@@ -25,74 +25,117 @@ public class SystemInitializationStartup implements ApplicationListener<ContextR
      * 注意：1、建议配置在配置文件中 2、缺省为true
      */
     @Value("${web.system.initial:true}")
-    boolean initial;
+    public boolean initial;
+
+    @Value("${spring.profiles:'UNKONW'}")
+    public String profiles;
+
+    /**
+     * 端口
+     */
+    @Value("${server.port:8000}")
+    public int port;
+
+    /**
+     * server:
+     * #  port: 8002
+     * servlet:
+     * context-path: /zero
+     */
+    @Value("${server.servlet.context-path}")
+    public String servletContextPath;
 
     @Autowired
     private ApplicationContext applicationContext;
 
 
-
     @Autowired
     private Environment env;
+
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         //Spring容器加载完毕之后执行: 以下方法
         log.debug("是否在系统启动的时候初始化一些操作 {}", initial);
         if (initial) {
-            log.debug("debug结果={}", System.getenv("OS"));
-            log.info("info结果={}", System.getenv("OS"));
-            log.warn("warn结果={}", System.getenv("OS"));
-            log.trace("trace结果={}", System.getenv("OS"));
-            log.error("error结果={}", System.getenv("OS"));
+            print();
+            print2();
 
-            log.info("System.getenv() 方法是获取指定的环境变量的值={}", System.getenv());
-            log.info("System.getenv() 方法是获取指定的环境变量的值={}", System.getenv().toString());
-
-            log.debug("++++++++++++++++++++++++++++++++++++++");
-            log.info("Path ={}", System.getenv("Path"));
-            log.info("用户名USERNAME ={}", System.getenv("USERNAME"));
-            log.info("计算机名COMPUTERNAME ={}", System.getenv("COMPUTERNAME"));
-            log.info("用户目录USERPROFILE ={}", System.getenv("USERPROFILE"));
-            log.info("用户域USERDNSDOMAIN ={}", System.getenv("USERDNSDOMAIN"));
-            log.info("帐户的域的名称USERDOMAIN ={}", System.getenv("USERDOMAIN"));
-            log.info("Session名称 ={}", System.getenv("SESSIONNAME"));
-            log.info("用户公共目录ALLUSERSPROFILE ={}", System.getenv("ALLUSERSPROFILE"));
-            log.info("可执行后缀 ={}", System.getenv("PATHEXT"));
-            log.info("classpath环境变量 ={}", System.getenv("classpath"));
-            log.info("JAVA_HOME ={}", System.getenv("JAVA_HOME"));
-            log.info("用户临时文件目录TEMP ={}", System.getenv("TEMP"));
-            log.info("系统盘符 ={}", System.getenv("SystemDrive"));
-            log.info("默认程序目录 ={}", System.getenv("ProgramFiles"));
-            log.info("处理器体系结构 ={}", System.getenv("PROCESSOR_ARCHITECTURE"));
-            log.info("处理级别 ={}", System.getenv("PROCESSOR_LEVEL"));
-            log.info("系统启动目录 ={}", System.getenv("SystemRoot"));
-            log.info("命令行解释器可执行程序的准确路径 ={}", System.getenv("ComSpec"));
-            log.info("应用程序数据目录 ={}", System.getenv("APPDATA"));
-            log.info("java.version ={}", System.getenv("java.version"));
-            log.info("java.vendor ={}", System.getenv("java.vendor"));
-
-            log.debug("++++++++++++++++++++++++++++++++++++++");
-            String[] activeProfiles = applicationContext.getEnvironment().getActiveProfiles();
-            log.info("activeProfiles.length ={}", activeProfiles.length);
-            String[] activeProfiles1 = env.getActiveProfiles();
-            String[] defaultProfiles = env.getDefaultProfiles();
-            log.info("activeProfiles1={}", activeProfiles1);
-            log.info("defaultProfiles={}", defaultProfiles);
-
-            if (activeProfiles != null && activeProfiles.length != 0) {
-                for (String profile : activeProfiles) {
-                    log.info("profile ={}", profile);
-                }
-            }
-            log.info("激活的配置文件profile ={}", System.getProperty("spring.profiles.active"));
-
-
-
-
-            System.out.println("##################################################");
-            System.out.println(" Spring容器加载完毕之后执行的方法可以做一些扩展  ");
-            System.out.println("##################################################");
         }
+    }
+
+    private void print2() {
+        System.out.println("##################################################");
+        log.info("激活的配置文件profile ={}", System.getProperty("spring.profiles.active"));
+        System.out.println(" Spring容器加载完毕之后执行的方法可以做一些扩展  ");
+        System.out.println(" Spring 启用配置是profiles=" + profiles);
+        System.out.println("http://" + getServerIp() + ":" + port + getServletContextPath() + "/info");
+        System.out.println("##################################################");
+    }
+
+
+    private String getServletContextPath() {
+        String servletContextPath = this.servletContextPath;
+        if (servletContextPath == null) {
+            servletContextPath= "";
+        }
+        if (!servletContextPath.startsWith("/")) {
+            servletContextPath= "/" + servletContextPath;
+        }
+        return servletContextPath;
+
+    }
+
+    private String getServerIp() {
+        return "127.0.0.1";
+    }
+
+    private void print() {
+        log.debug("debug结果={}", System.getenv("OS"));
+        log.info("info结果={}", System.getenv("OS"));
+        log.warn("warn结果={}", System.getenv("OS"));
+        log.trace("trace结果={}", System.getenv("OS"));
+        log.error("error结果={}", System.getenv("OS"));
+
+        log.info("System.getenv() 方法是获取指定的环境变量的值={}", System.getenv());
+        log.info("System.getenv() 方法是获取指定的环境变量的值={}", System.getenv().toString());
+
+        log.debug("++++++++++++++++++++++++++++++++++++++");
+        log.info("Path ={}", System.getenv("Path"));
+        log.info("用户名USERNAME ={}", System.getenv("USERNAME"));
+        log.info("计算机名COMPUTERNAME ={}", System.getenv("COMPUTERNAME"));
+        log.info("用户目录USERPROFILE ={}", System.getenv("USERPROFILE"));
+        log.info("用户域USERDNSDOMAIN ={}", System.getenv("USERDNSDOMAIN"));
+        log.info("帐户的域的名称USERDOMAIN ={}", System.getenv("USERDOMAIN"));
+        log.info("Session名称 ={}", System.getenv("SESSIONNAME"));
+        log.info("用户公共目录ALLUSERSPROFILE ={}", System.getenv("ALLUSERSPROFILE"));
+        log.info("可执行后缀 ={}", System.getenv("PATHEXT"));
+        log.info("classpath环境变量 ={}", System.getenv("classpath"));
+        log.info("JAVA_HOME ={}", System.getenv("JAVA_HOME"));
+        log.info("用户临时文件目录TEMP ={}", System.getenv("TEMP"));
+        log.info("系统盘符 ={}", System.getenv("SystemDrive"));
+        log.info("默认程序目录 ={}", System.getenv("ProgramFiles"));
+        log.info("处理器体系结构 ={}", System.getenv("PROCESSOR_ARCHITECTURE"));
+        log.info("处理级别 ={}", System.getenv("PROCESSOR_LEVEL"));
+        log.info("系统启动目录 ={}", System.getenv("SystemRoot"));
+        log.info("命令行解释器可执行程序的准确路径 ={}", System.getenv("ComSpec"));
+        log.info("应用程序数据目录 ={}", System.getenv("APPDATA"));
+        log.info("java.version ={}", System.getenv("java.version"));
+        log.info("java.vendor ={}", System.getenv("java.vendor"));
+
+        log.debug("++++++++++++++++++++++++++++++++++++++");
+        String[] activeProfiles = applicationContext.getEnvironment().getActiveProfiles();
+        log.info("activeProfiles.length ={}", activeProfiles.length);
+        String[] activeProfiles1 = env.getActiveProfiles();
+        String[] defaultProfiles = env.getDefaultProfiles();
+        log.info("activeProfiles1={}", activeProfiles1);
+        log.info("defaultProfiles={}", defaultProfiles);
+
+        if (activeProfiles != null && activeProfiles.length != 0) {
+            for (String profile : activeProfiles) {
+                log.info("profile ={}", profile);
+            }
+        }
+
     }
 
 
