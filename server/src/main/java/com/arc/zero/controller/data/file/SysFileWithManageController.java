@@ -13,12 +13,6 @@ import java.util.HashMap;
 /**
  * 文件下载测试数据库记录的相关API
  * insert --路径中有斜线传递时候有问题 需要解决下
- * delete --ok
- * update --ok
- * select one  --ok
- * select page --todo 使用 spring data 就好做了,这里先使用原生的 mybatis plus
- * upload      --基本解决
- * download    --基本解决技术瓶颈,但是下载文件乱码,前端还有技术问题
  *
  * @author lamymay
  * @date 2020/11/25
@@ -35,41 +29,65 @@ public class SysFileWithManageController {
     private SysFileService fileService;
 
     @RequestMapping(value = "/delete/{symbol}", method = {RequestMethod.DELETE, RequestMethod.GET})
-    public ResponseEntity delete(@PathVariable Object symbol) {
+    public ResponseEntity delete(@PathVariable String symbol) {
         HashMap<String, Object> map = new HashMap<>();
         if (symbol == null) {
             map.put("code", -1);
             map.put("message", "参数错误");
         }
-        if (symbol instanceof Long) {
-            Long id = (Long) symbol;
+        try {
+            Long id = Long.valueOf(symbol);
             map.put("code", 1);
             map.put("data", id);
             map.put("describe", "参数是数字类型的id");
             boolean deleteAndCleanFile = fileService.deleteAndCleanFile(new SysFileRequest(id), true);
             map.put("data", deleteAndCleanFile);
-        } else if (symbol instanceof String) {
+        } catch (NumberFormatException exception) {
             /*
             注意 : 0X1234 会被判定为字符串
              */
             map.put("code", 1);
-            String code = (String) symbol;
             map.put("describe", "参数是字符串类型的code");
-            boolean deleteAndCleanFile = fileService.deleteAndCleanFile(new SysFileRequest(code), true);
+            boolean deleteAndCleanFile = fileService.deleteAndCleanFile(new SysFileRequest(symbol), true);
             map.put("data", deleteAndCleanFile);
+        } catch (Exception exception) {
+            /*
+            注意 : 0X1234 会被判定为字符串
+             */
+            map.put("code", -1);
+            map.put("describe", exception.getCause() + exception.getMessage());
+            map.put("data", exception);
         }
+
         return ResponseEntity.ok(map);
     }
 
-    @GetMapping("/delete/code/{code}")
-    public ResponseVo delete(@PathVariable String code) {
-        return ResponseVo.success(fileService.deleteByCode(code));
-    }
+    //        if (symbol instanceof Long) {
+//            Long id = (Long) symbol;
+//            map.put("code", 1);
+//            map.put("data", id);
+//            map.put("describe", "参数是数字类型的id");
+//            boolean deleteAndCleanFile = fileService.deleteAndCleanFile(new SysFileRequest(id), true);
+//            map.put("data", deleteAndCleanFile);
+//        } else if (symbol instanceof String) {
+//            /*
+//            注意 : 0X1234 会被判定为字符串
+//             */
+//            map.put("code", 1);
+//            String code = (String) symbol;
+//            map.put("describe", "参数是字符串类型的code");
+//            boolean deleteAndCleanFile = fileService.deleteAndCleanFile(new SysFileRequest(code), true);
+//            map.put("data", deleteAndCleanFile);
+//        }
+//    @GetMapping("/delete/code/{code}")
+//    public ResponseVo delete(@PathVariable String code) {
+//        return ResponseVo.success(fileService.deleteByCode(code));
+//    }
 
     @GetMapping("/get")
     public ResponseVo getSysFileByUrl(@RequestParam String url) {
         SysFileRequest request = new SysFileRequest();
-        request.setUrl(url);
+        request.setUri(url);
         return ResponseVo.success(fileService.getByRequest(request));
     }
 

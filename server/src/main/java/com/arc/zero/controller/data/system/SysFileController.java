@@ -90,7 +90,7 @@ public class SysFileController {
     @GetMapping("/get")
     public ResponseVo getSysFileByUrl(@RequestParam String url) {
         SysFileRequest request = new SysFileRequest();
-        request.setUrl(url);
+        request.setUri(url);
         return ResponseVo.success(fileService.getByRequest(request));
     }
 

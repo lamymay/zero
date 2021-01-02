@@ -48,12 +48,12 @@
 	</sql>
 
     <delete id="delete" parameterType="long">
-        DELETE FROM  t_sys_file
+        DELETE FROM  sys_file
         WHERE  id = #{id,jdbcType=BIGINT}
     </delete>
 
     <delete id="deleteByRequest" parameterType="map">
-        DELETE FROM t_sys_file
+        DELETE FROM sys_file
         <where>
             <if test="id != null">id = #{id}</if>
             <if test="version != null">version = #{version}</if>
@@ -66,14 +66,14 @@
     <select id="get" parameterType="long" resultMap="sysFile">
         SELECT
         <include refid="sqlSysFileColumns"/>
-        FROM t_sys_file sys_file_
+        FROM sys_file sys_file_
         WHERE sys_file_.id = #{id,jdbcType=BIGINT}
     </select>
 
     <select id="getByCode" parameterType="string" resultMap="sysFile">
         SELECT
         <include refid="sqlSysFileColumns"/>
-        FROM t_sys_file sys_file_
+        FROM sys_file sys_file_
         WHERE
         sys_file_.code = #{code,jdbcType=VARCHAR}
         or sys_file_.id = #{code}
@@ -83,7 +83,7 @@
     <select id="getByRequest" parameterType="string" resultMap="sysFile">
         SELECT
         <include refid="sqlSysFileColumns"/>
-        FROM t_sys_file sys_file_
+        FROM sys_file sys_file_
         WHERE
         <if test="id != null ">id = #{id}</if>
         <if test="code != null and code != ''">code = #{code}</if>
@@ -93,7 +93,7 @@
     <select id="list" resultMap="sysFile">
         SELECT
         <include refid="sqlSysFileColumns"/>
-        FROM t_sys_file sys_file_
+        FROM sys_file sys_file_
         order by id desc
     </select>
 
@@ -102,7 +102,7 @@
             resultMap="sysFile">
         SELECT
         <include refid="sqlSysFileColumns"/>
-        FROM t_sys_file sys_file_
+        FROM sys_file sys_file_
         <where>
             <if test="name != null and name != ''">sys_file_.name LIKE CONCAT('%',#{name},'%')</if>
         </where>
@@ -111,7 +111,7 @@
     </select>
 
     <insert id="save" parameterType="com.arc.core.model.domain.system.SysFile" useGeneratedKeys="true" keyProperty="id">
-		INSERT INTO t_sys_file (
+		INSERT INTO sys_file (
 			name,
 			suffix,
 			version,
@@ -156,7 +156,7 @@
 	</insert>
 
     <update id="update" parameterType="com.arc.core.model.domain.system.SysFile">
-        UPDATE t_sys_file
+        UPDATE sys_file
         <set>
             <if test="name != null and name != ''">`name` = #{name,jdbcType=VARCHAR},</if>
             <if test="suffix != null and suffix != ''">suffix = #{suffix,jdbcType=VARCHAR},</if>
@@ -183,13 +183,13 @@
 
 
     <select id="count" resultType="int">
-       SELECT	count( * )FROM	`t_sys_file`;
+       SELECT	count( * )FROM	`sys_file`;
     </select>
 
     <select id="listPage" parameterType="com.arc.core.model.request.system.file.SysFileRequest" resultMap="sysFile">
         SELECT
         <include refid="sqlSysFileColumns"/>
-        FROM t_sys_file sys_file_
+        FROM sys_file sys_file_
 
         <where>
             state=1

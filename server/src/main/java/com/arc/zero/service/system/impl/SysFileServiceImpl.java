@@ -123,7 +123,7 @@ public class SysFileServiceImpl implements SysFileService {
         if (cleanDisk) {
             concurrencyClean(sysFile);
         }
-        int delete = sysFileMapper.delete(sysFile.getId());
+        int delete = sysFileMapper.deleteById(sysFile.getId());
         return  delete==1;
 //        int delete = sysFileMapper.delete  (request.getId());
     }
