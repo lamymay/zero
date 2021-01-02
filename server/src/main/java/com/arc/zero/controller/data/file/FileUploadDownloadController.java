@@ -29,7 +29,7 @@ import java.net.URLEncoder;
 @Slf4j
 @RestController
 @Deprecated
-@RequestMapping({"file"})
+@RequestMapping({"/v1/file"})
 public class FileUploadDownloadController {
 
     @Resource

@@ -34,14 +34,14 @@
 
     <select id="list" resultMap="demoModel">
         SELECT *
-        FROM test_enum_domain 
+        FROM test_enum_domain
     </select>
 
     <select id="count" resultType="int">
        SELECT	count( * )FROM	`test_enum_domain`
     </select>
 
-    <!--    <insert id="save" parameterType="com.arc.core.model.domain.demo.DemoDomain" useGeneratedKeys="true"-->
+    <!--    <insert id="save" parameterType="com.arc.core.model.domain.demo.DemoModel" useGeneratedKeys="true"-->
     <!--            keyProperty="id">-->
     <!--		INSERT INTO test_enum_domain (-->
     <!--			`name`,-->
@@ -94,7 +94,7 @@
     <!--		)-->
     <!--	</insert>-->
 
-    <!--    <update id="update" parameterType="com.arc.core.model.domain.demo.DemoDomain">-->
+    <!--    <update id="update" parameterType="com.arc.core.model.domain.demo.DemoModel">-->
     <!--        UPDATE test_enum_domain-->
     <!--        <set>-->
     <!--            <if test="name != null and name != ''">name = #{name,jdbcType=VARCHAR},</if>-->

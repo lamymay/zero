@@ -106,18 +106,25 @@ public class SysFileServiceImpl implements SysFileService {
     }
 
     @Override
-    public void deleteByRequest(SysFileRequest request, boolean cleanDisk) {
+    public boolean deleteAndCleanFile(SysFileRequest request, boolean cleanDisk) {
         //删除数据库记录
         // 删除磁盘上文件
 
         //两种方案：
         // 1、立即删除--先查然后在删除文件--最后删除表中数据----->改进 查到后并发调用两个线程同时删除文件以及库中数据并发记录操作流水
         // 2、update表中数据的标识后、由其他方法异步删除
-        if (cleanDisk) {
-            SysFile sysFile = getByRequest(request);
-            concurrencyClean(sysFile);
+        SysFile sysFile = getByRequest(request);
+        if(sysFile==null){
+            // 文件不存在不需要删除直接返回成功
+            return true;
         }
 
+
+        if (cleanDisk) {
+            concurrencyClean(sysFile);
+        }
+        int delete = sysFileMapper.delete(sysFile.getId());
+        return  delete==1;
 //        int delete = sysFileMapper.delete  (request.getId());
     }
 

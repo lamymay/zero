@@ -26,7 +26,13 @@ public interface SysFileService {
 
     int deleteByRequest(Map<String, Object> map);
 
-    void deleteByRequest(SysFileRequest request, boolean cleanDisk);
+    /**
+     * 删除文件并且清理
+     * @param request 删除参数
+     * @param cleanDisk
+     * @return
+     */
+    boolean deleteAndCleanFile(SysFileRequest request, boolean cleanDisk);
 
     int update(SysFile sysFile);
 
