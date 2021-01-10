@@ -109,4 +109,75 @@
         WHERE id = #{id,jdbcType=BIGINT}
     </update>
 
+
+    <select id="listTest1" resultMap="user">
+        SELECT
+        <include refid="sysUserColumns"/>
+        FROM t_sys_user user_
+        where user_.id in
+        <foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+
+    </select>
+
+
+    <select id="listTest2" resultMap="user">
+        SELECT
+        <include refid="sysUserColumns"/>
+        FROM t_sys_user user_
+        where user_.id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
+    <select id="listTest3" resultMap="user">
+        SELECT
+        <include refid="sysUserColumns"/>
+        FROM t_sys_user user_
+        where user_.id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and user_.`state` = #{state}
+    </select>
+
+
+    <select id="listTest4" resultMap="user">
+        SELECT
+        <include refid="sysUserColumns"/>
+        FROM t_sys_user user_
+        where user_.id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and user_.`state` = #{user.state}
+    </select>
+
+
+    <!-- List<SysUser> listTest5(Long[] ids); -->
+    <select id="listTest5" resultMap="user">
+        SELECT
+        <include refid="sysUserColumns"/>
+        FROM t_sys_user user_
+        where user_.id in
+        <foreach collection="array" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <!-- List<SysUser> listTest6(Map<String, Object> map);  map.put(ids,idList) -->
+    <select id="listTest6" resultMap="user">
+        SELECT
+        <include refid="sysUserColumns"/>
+        FROM t_sys_user user_
+        where user_.id in
+        <foreach collection="ids" index="index" item="item" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+
 </mapper>

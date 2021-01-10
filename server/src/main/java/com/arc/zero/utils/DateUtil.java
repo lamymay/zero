@@ -15,7 +15,14 @@ public class DateUtil {
     public static void main(String[] args) {
         //test1();
         test2();
-
+        try {
+            //1.	设置两个时间
+            Date date = DateUtils.parseDate("2021-01-04 18:50:00", "yyyy-MM-dd HH:mm:ss");
+            System.out.println(date);
+            System.out.println(date.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -24,7 +31,7 @@ public class DateUtil {
         Date date2 = null;
         try {
             //1.	设置两个时间
-            date1 = DateUtils.parseDate("2018-07-09 13:08:15", "yyyy-MM-dd HH:mm:ss");
+            date1 = DateUtils.parseDate("2018-07-09 13:08:1ÎÍ5", "yyyy-MM-dd HH:mm:ss");
             date2 = DateUtils.parseDate("2018-07-02 18:35:53", "yyyy-MM-dd HH:mm:ss");
         } catch (ParseException e) {
             e.printStackTrace();
