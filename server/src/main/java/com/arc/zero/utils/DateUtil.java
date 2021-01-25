@@ -14,10 +14,10 @@ public class DateUtil {
 
     public static void main(String[] args) {
         //test1();
-        test2();
+        //test2();
         try {
-            //1.	设置两个时间
-            Date date = DateUtils.parseDate("2021-01-04 18:50:00", "yyyy-MM-dd HH:mm:ss");
+            //1.	设置两个时间 2021-01-18 19:42:04
+            Date date = DateUtils.parseDate("2021-01-18 21:09:00", "yyyy-MM-dd HH:mm:ss");
             System.out.println(date);
             System.out.println(date.getTime());
         } catch (ParseException e) {

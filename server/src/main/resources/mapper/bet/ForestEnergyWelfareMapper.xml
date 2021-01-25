@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.bet.ForestEnergyWelfareMapper">
+    <resultMap id="forestEnergyWelfare" type="com.arc.core.model.domain.bet.Award">
+        <id property="id" column="forest_energy_welfare_id" javaType="long" jdbcType="BIGINT"/>
+        <result property="creator" column="forest_energy_welfare_creator" javaType="string" jdbcType="VARCHAR"/>
+        <result property="donationTargetAvatar" column="forest_energy_welfare_donation_target_avatar" javaType="string"
+                jdbcType="VARCHAR"/>
+
+        <result property="donationTargetId" column="forest_energy_welfare_donation_target_id" javaType="long"
+                jdbcType="BIGINT"/>
+        <result property="donationTargetName" column="forest_energy_welfare_donation_target_name" javaType="string"
+                jdbcType="VARCHAR"/>
+
+        <result property="finishTime" column="forest_energy_welfare_finish_time" javaType="java.util.Date"
+                jdbcType="TIMESTAMP"/>
+        <result property="gmtCreate" column="forest_energy_welfare_gmt_create" javaType="java.util.Date"
+                jdbcType="TIMESTAMP"/>
+        <result property="gmtModified" column="forest_energy_welfare_gmt_modified" javaType="java.util.Date"
+                jdbcType="TIMESTAMP"/>
+        <result property="nextWelfareId" column="forest_energy_welfare_next_welfare_id" javaType="long"
+                jdbcType="BIGINT"/>
+        <result property="period" column="forest_energy_welfare_period" javaType="int" jdbcType="INTEGER"/>
+        <result property="price" column="forest_energy_welfare_price" javaType="int" jdbcType="INTEGER"/>
+        <result property="priceUnit" column="forest_energy_welfare_price_unit" javaType="string" jdbcType="VARCHAR"/>
+        <result property="status" column="forest_energy_welfare_status" javaType="int" jdbcType="INTEGER"/>
+        <result property="target" column="forest_energy_welfare_target" javaType="long" jdbcType="BIGINT"/>
+        <result property="totalAmountOfParticipants" column="forest_energy_welfare_total_amount_of_participants"/>
+        <result property="totalTimeOfParticipants" column="forest_energy_welfare_total_time_of_participants"/>
+        <result property="welfareAvatar" column="forest_energy_welfare_welfare_avatar"/>
+
+        <result property="welfareName" column="forest_energy_welfare_welfare_name" javaType="string"
+                jdbcType="VARCHAR"/>
+        <result property="welfareSupportAvatar" column="forest_energy_welfare_welfare_support_avatar" javaType="string"
+                jdbcType="VARCHAR"/>
+
+        <result property="welfareSupportId" column="forest_energy_welfare_welfare_support_id" javaType="long"
+                jdbcType="BIGINT"/>
+        <result property="welfareSupportName" column="forest_energy_welfare_welfare_support_name" javaType="string"
+                jdbcType="VARCHAR"/>
+        <result property="welfareTotal" column="forest_energy_welfare_welfare_total" javaType="int" jdbcType="INTEGER"/>
+        <result property="welfareType" column="forest_energy_welfare_welfare_type" javaType="int" jdbcType="INTEGER"/>
+
+        <result property="donationTargetDetailJson"
+                column="forest_energy_welfare_donation_target_detail_json"
+                javaType="com.alibaba.fastjson.JSONObject"
+                jdbcType="VARCHAR"
+                typeHandler="com.arc.zero.config.mybatis.type.handler.JSONObjectHandler"/>
+
+        <result property="welfareDetailJson"
+                column="forest_energy_welfare_welfare_detail_json"
+                javaType="com.alibaba.fastjson.JSONObject"
+                jdbcType="VARCHAR"
+                typeHandler="com.arc.zero.config.mybatis.type.handler.JSONObjectHandler"/>
+        <result property="welfareSupportDetailJson"
+                column="forest_energy_welfare_welfare_support_detail_json"
+                javaType="com.alibaba.fastjson.JSONObject"
+                jdbcType="VARCHAR"
+                typeHandler="com.arc.zero.config.mybatis.type.handler.JSONObjectHandler"/>
+        <result property="extend"
+                column="forest_energy_welfare_extend"
+                javaType="com.alibaba.fastjson.JSONObject"
+                jdbcType="VARCHAR"
+                typeHandler="com.arc.zero.config.mybatis.type.handler.JSONObjectHandler"/>
+
+    </resultMap>
+
+    <sql id="forestEnergyWelfareAllColumns">
+		forest_energy_welfare_.creator AS forest_energy_welfare_creator,
+		forest_energy_welfare_.donation_target_avatar AS forest_energy_welfare_donation_target_avatar,
+		forest_energy_welfare_.donation_target_detail_json AS forest_energy_welfare_donation_target_detail_json,
+		forest_energy_welfare_.donation_target_id AS forest_energy_welfare_donation_target_id,
+		forest_energy_welfare_.donation_target_name AS forest_energy_welfare_donation_target_name,
+		forest_energy_welfare_.extend AS forest_energy_welfare_extend,
+		forest_energy_welfare_.finish_time AS forest_energy_welfare_finish_time,
+		forest_energy_welfare_.gmt_create AS forest_energy_welfare_gmt_create,
+		forest_energy_welfare_.gmt_modified AS forest_energy_welfare_gmt_modified,
+		forest_energy_welfare_.id AS forest_energy_welfare_id,
+		forest_energy_welfare_.next_welfare_id AS forest_energy_welfare_next_welfare_id,
+		forest_energy_welfare_.period AS forest_energy_welfare_period,
+		forest_energy_welfare_.price AS forest_energy_welfare_price,
+		forest_energy_welfare_.price_unit AS forest_energy_welfare_price_unit,
+		forest_energy_welfare_.status AS forest_energy_welfare_status,
+		forest_energy_welfare_.target AS forest_energy_welfare_target,
+		forest_energy_welfare_.total_amount_of_participants AS forest_energy_welfare_total_amount_of_participants,
+		forest_energy_welfare_.total_time_of_participants AS forest_energy_welfare_total_time_of_participants,
+		forest_energy_welfare_.welfare_avatar AS forest_energy_welfare_welfare_avatar,
+		forest_energy_welfare_.welfare_detail_json AS forest_energy_welfare_welfare_detail_json,
+		forest_energy_welfare_.welfare_name AS forest_energy_welfare_welfare_name,
+		forest_energy_welfare_.welfare_support_avatar AS forest_energy_welfare_welfare_support_avatar,
+		forest_energy_welfare_.welfare_support_detail_json AS forest_energy_welfare_welfare_support_detail_json,
+		forest_energy_welfare_.welfare_support_id AS forest_energy_welfare_welfare_support_id,
+		forest_energy_welfare_.welfare_support_name AS forest_energy_welfare_welfare_support_name,
+		forest_energy_welfare_.welfare_total AS forest_energy_welfare_welfare_total,
+		forest_energy_welfare_.welfare_type AS forest_energy_welfare_welfare_type
+	</sql>
+
+
+    <insert id="save" parameterType="com.arc.core.model.domain.bet.Award" useGeneratedKeys="true"
+			keyProperty="id">
+		INSERT INTO forest_energy_welfare (
+			creator,
+			donation_target_avatar,
+			donation_target_id,
+			donation_target_name,
+			
+			finish_time,
+			gmt_create,
+			gmt_modified,
+			next_welfare_id,
+			`period`,
+			price,
+			price_unit,
+			status,
+			target,
+			total_amount_of_participants,
+			total_time_of_participants,
+			welfare_avatar,
+					
+			welfare_name,
+			welfare_support_avatar,
+
+			welfare_support_id,
+			welfare_support_name,
+			welfare_total,
+			welfare_type,
+			
+			donation_target_detail_json,
+			welfare_detail_json,
+			welfare_support_detail_json,
+			extend
+		)
+        VALUES (
+			#{creator},
+			#{donationTargetAvatar},
+			#{donationTargetId},
+			#{donationTargetName},
+			
+			#{finishTime},
+			#{gmtCreate},
+			#{gmtModified},
+			#{nextWelfareId},
+			#{period},
+			#{price},
+			#{priceUnit},
+			#{status},
+			#{target},
+			#{totalAmountOfParticipants},
+			#{totalTimeOfParticipants},
+			#{welfareAvatar},
+				
+			#{welfareName},
+			#{welfareSupportAvatar},
+			#{welfareSupportId},
+			#{welfareSupportName},
+			#{welfareTotal},
+			#{welfareType},
+			
+			#{donationTargetDetailJson,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler},
+			#{welfareDetailJson,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler},
+			#{welfareSupportDetailJson,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler},
+			#{extend,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler}
+		)
+	</insert>
+
+    <update id="update" parameterType="com.arc.core.model.domain.bet.Award">
+        UPDATE forest_energy_welfare
+        set
+        gmt_modified = now()
+
+        <if test="creator != null and creator != ''">,creator = #{creator}</if>
+        <if test="donationTargetAvatar != null and donationTargetAvatar != ''">,donation_target_avatar =#{donationTargetAvatar}</if>
+        <if test="donationTargetId != null">,donation_target_id = #{donationTargetId}</if>
+        <if test="donationTargetName != null and donationTargetName != ''">,donation_target_name =#{donationTargetName}</if>
+
+        <if test="finishTime != null">,finish_time = #{finishTime}</if>
+        <if test="nextWelfareId != null">,next_welfare_id = #{nextWelfareId}</if>
+        <if test="period != null">,`period` = #{period}</if>
+        <if test="price != null">,price = #{price}</if>
+        <if test="priceUnit != null and priceUnit != ''">,price_unit = #{priceUnit}</if>
+        <if test="status != null">,status = #{status}</if>
+        <if test="target != null">,target = #{target}</if>
+        <if test="totalAmountOfParticipants != null">,total_amount_of_participants = #{totalAmountOfParticipants}</if>
+        <if test="totalTimeOfParticipants != null">,total_time_of_participants = #{totalTimeOfParticipants}</if>
+        <if test="welfareAvatar != null and welfareAvatar != ''">,welfare_avatar = #{welfareAvatar}</if>
+
+        <if test="welfareName != null and welfareName != ''">,welfare_name = #{welfareName}</if>
+        <if test="welfareSupportAvatar != null and welfareSupportAvatar != ''">,welfare_support_avatar =#{welfareSupportAvatar}</if>
+        <if test="welfareSupportId != null">,welfare_support_id = #{welfareSupportId}</if>
+        <if test="welfareSupportName != null and welfareSupportName != ''">,welfare_support_name =#{welfareSupportName}</if>
+        <if test="welfareTotal != null">,welfare_total = #{welfareTotal}</if>
+        <if test="welfareType != null">,welfare_type = #{welfareType}</if>
+		<if test="donationTargetDetailJson != null">,donation_target_detail_json = #{donationTargetDetailJson,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler}</if>
+		<if test="welfareDetailJson != null">,welfare_detail_json = #{welfareDetailJson,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler}</if>
+		<if test="welfareSupportDetailJson != null">,welfare_support_detail_json = #{welfareSupportDetailJson,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler}</if>
+		<if test="extend != null">,extend = #{extend,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler}</if>
+        WHERE id = #{id}
+    </update>
+
+
+    <select id="get" parameterType="long" resultMap="forestEnergyWelfare">
+        SELECT
+        <include refid="forestEnergyWelfareAllColumns"/>
+        FROM forest_energy_welfare forest_energy_welfare_
+        WHERE forest_energy_welfare_.id = #{id}
+    </select>
+
+    <select id="list" parameterType="com.arc.core.model.domain.bet.Award" resultMap="forestEnergyWelfare">
+        SELECT
+        <include refid="forestEnergyWelfareAllColumns"/>
+        FROM forest_energy_welfare forest_energy_welfare_
+        WHERE forest_energy_welfare_.id = #{id}
+    </select>
+
+    <delete id="delete" parameterType="long">
+		delete from forest_energy_welfare where id={id}
+	</delete>
+
+</mapper>

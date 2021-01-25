@@ -1,7 +1,8 @@
 package com.arc.zero.service.common.impl;
 
-import com.arc.core.model.BaseModel;
 import lombok.*;
+
+import java.io.Serializable;
 
 /**
  * @author 叶超
@@ -10,7 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 @ToString
-public class CompareAndSaveDto extends BaseModel {
+public class CompareAndSaveDto implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

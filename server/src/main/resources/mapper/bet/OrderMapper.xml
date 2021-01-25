@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.arc.zero.mapper.shop.OrderMapper">
+	<resultMap id="forestEnergyWelfareOrder" type="com.arc.core.model.domain.shop.Order">
+		<id property="id" column="id"  />
+		<result property="gmtCreate" column="gmt_create"  />
+		<result property="gmtModified" column="gmt_modified"  />
+
+		<result property="orderNumber" column="order_number"  />
+		<result property="certificate" column="certificate" />
+
+		<result property="costTotal" column="cost_total"  />
+		<result property="playTotal" column="play_total"  />
+
+		<result property="userId" column="user_id"  />
+		<result property="userAvatar" column="user_avatar"  />
+		<result property="userNickname" column="user_nickname"  />
+
+		<result property="welfareId" column="welfare_id"  />
+		<result property="welfareName" column="welfare_name"  />
+		<result property="welfareAvatar" column="welfare_avatar"  />
+		
+		<result property="welfareType" column="welfare_type" />
+		<result property="extend" column="extend" typeHandler="com.arc.zero.config.mybatis.type.handler.JSONObjectHandler"/>
+
+
+	</resultMap>
+
+	<sql id="sqlForestEnergyWelfareOrderColumns">
+
+		id ,
+		gmt_create  ,
+		gmt_modified ,
+
+		order_number ,
+		certificate ,
+		
+		cost_total  ,
+		play_total  ,
+
+
+		user_id  ,
+		user_avatar  ,
+		user_nickname  ,
+
+		welfare_id  ,
+		welfare_name  ,
+		welfare_avatar  ,
+
+		welfare_type  ,
+		extend
+</sql>
+
+	<insert id="save" parameterType="com.arc.core.model.domain.shop.Order" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO forest_energy_welfare_order (
+			gmt_create,
+			gmt_modified,
+			
+			order_number,
+			certificate,
+			
+			cost_total,
+			play_total,
+
+			user_id,
+			user_avatar,
+			user_nickname,
+			
+			welfare_id,
+			welfare_avatar,
+			welfare_name,
+			
+			welfare_type,
+			extend
+
+		)
+        VALUES (
+			now(),
+			now(),
+
+			#{orderNumber},
+			#{certificate},
+
+			#{costTotal},
+			#{playTotal},
+
+			#{userId},
+			#{userAvatar},
+			#{userNickname},
+
+			#{welfareId},
+			#{welfareAvatar},
+			#{welfareName},
+
+			#{welfareType},
+			#{extend,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler}
+		)
+	</insert>
+
+	<update id="update" parameterType="com.arc.core.model.domain.shop.Order">
+		UPDATE forest_energy_welfare_order
+		<set>
+			gmt_modified = now()
+
+			<if test="orderNumber != null and orderNumber != ''">, order_number = #{orderNumber}</if>
+			<if test="certificate != null ">, certificate = #{certificate}</if>
+
+			<if test="costTotal != null">, costTotal = #{costTotal}</if>
+			<if test="playTotal != null">, play_total = #{playTotal}</if>
+
+			<if test="userId != null">, user_id = #{userId}</if>
+			<if test="userAvatar != null and userAvatar != ''">, user_avatar = #{userAvatar}</if>
+			<if test="userNickname != null and userNickname != ''">, user_nickname = #{userNickname}</if>
+
+			<if test="welfareId != null">, welfare_id = #{welfareId}</if>
+			<if test="welfareAvatar != null and welfareAvatar != ''">, welfare_avatar = #{welfareAvatar}</if>
+			<if test="welfareName != null and welfareName != ''">, welfare_name = #{welfareName}</if>
+
+			<if test="welfareType != null">, welfare_type = #{welfareType}</if>
+			<if test="extend != null">,extend = #{extend,typeHandler=com.arc.zero.config.mybatis.type.handler.JSONObjectHandler}</if>
+
+		</set>
+		WHERE id = #{id}
+	</update>
+
+	<delete id="delete" parameterType="long">
+		delete from forest_energy_welfare_order where id={id}
+	</delete>
+
+	<select id="get" parameterType="long" resultMap="forestEnergyWelfareOrder">
+		SELECT <include refid="sqlForestEnergyWelfareOrderColumns" />
+		FROM forest_energy_welfare_order  
+		WHERE id = #{id}
+	</select>
+
+	<select id="list" parameterType="com.arc.core.model.domain.shop.Order" resultMap="forestEnergyWelfareOrder">
+		SELECT <include refid="sqlForestEnergyWelfareOrderColumns" />
+		FROM forest_energy_welfare_order    
+		<where>
+			<if test="welfareId != null">  welfare_id = #{welfareId}</if>
+		</where>
+	</select>
+</mapper>

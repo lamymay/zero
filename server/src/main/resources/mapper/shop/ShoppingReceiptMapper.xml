@@ -27,7 +27,7 @@
         <result property="remark" column="shopping_receipt_remark" javaType="string" jdbcType="VARCHAR"/>
         <result property="state" column="shopping_receipt_state"/>
         <result property="avatar" column="shopping_receipt_avatar" javaType="string" jdbcType="VARCHAR"/>
-        <result property="consumerHoline" column="shopping_receipt_consumer_holine" javaType="string"
+        <result property="consumerHoline" column="shopping_receipt_consumer_hotline" javaType="string"
                 jdbcType="VARCHAR"/>
         <result property="transactionTime" column="shopping_receipt_transaction_time" javaType="java.time.LocalDateTime"
                 jdbcType="TIMESTAMP"/>
@@ -58,7 +58,7 @@
 		shopping_receipt_.remark AS shopping_receipt_remark,
 		shopping_receipt_.state AS shopping_receipt_state,
 		shopping_receipt_.avatar AS shopping_receipt_avatar,
-		shopping_receipt_.consumer_holine AS shopping_receipt_consumer_holine,
+		shopping_receipt_.consumer_hotline AS shopping_receipt_consumer_hotline,
 		shopping_receipt_.transaction_time AS shopping_receipt_transaction_time,
 		shopping_receipt_.create_time AS shopping_receipt_create_time,
 		shopping_receipt_.update_time AS shopping_receipt_update_time
@@ -101,7 +101,7 @@
 			remark,
 			`state`,
 			avatar,
-			consumer_holine,
+			consumer_hotline,
 			transaction_time,
 			create_time
 		)
@@ -158,7 +158,7 @@
             <if test="remark != null and remark != ''">remark = #{remark,jdbcType=VARCHAR},</if>
             <if test="state != null">state = #{state},</if>
             <if test="avatar != null and avatar != ''">avatar = #{avatar,jdbcType=VARCHAR},</if>
-            <if test="consumerHoline != null and consumerHoline != ''">consumer_holine =
+            <if test="consumerHoline != null and consumerHoline != ''">consumer_hotline =
                 #{consumerHoline,jdbcType=VARCHAR},
             </if>
             <if test="transactionTime != null">transaction_time = #{transactionTime,jdbcType=TIMESTAMP},</if>

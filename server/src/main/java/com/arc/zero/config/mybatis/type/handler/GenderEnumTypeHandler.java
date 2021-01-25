@@ -1,4 +1,4 @@
-package com.arc.zero.config.mybatis.typehandler;
+package com.arc.zero.config.mybatis.type.handler;
 
 import com.arc.core.enums.common.GenderEnum;
 import org.apache.ibatis.type.JdbcType;
@@ -12,24 +12,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
+ * Mybatis结果集类型转换为java类型,用于性别转换
+ *
  * @author yechao
  * @date 2020/9/8 9:43 上午
  */
 @MappedTypes(GenderEnum.class)
 @MappedJdbcTypes(JdbcType.INTEGER)
-public class SexEnumTypeHandler implements TypeHandler<GenderEnum> {
+public class GenderEnumTypeHandler implements TypeHandler<GenderEnum> {
 
     @Override
-    public void setParameter(PreparedStatement ps,
-                             int i,
-                             GenderEnum parameter,
-                             JdbcType jdbcType) throws SQLException {
+    public void setParameter(PreparedStatement ps, int i, GenderEnum parameter, JdbcType jdbcType) throws SQLException {
         ps.setInt(i, parameter.getKey());
     }
 
     @Override
-    public GenderEnum getResult(ResultSet rs, String columnName)
-            throws SQLException {
+    public GenderEnum getResult(ResultSet rs, String columnName) throws SQLException {
         int id = rs.getInt(columnName);
         return GenderEnum.getSexByKey(id);
     }
@@ -41,8 +39,7 @@ public class SexEnumTypeHandler implements TypeHandler<GenderEnum> {
     }
 
     @Override
-    public GenderEnum getResult(CallableStatement rs, int columnIndex)
-            throws SQLException {
+    public GenderEnum getResult(CallableStatement rs, int columnIndex) throws SQLException {
         int id = rs.getInt(columnIndex);
         return GenderEnum.getSexByKey(id);
     }
