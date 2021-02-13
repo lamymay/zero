@@ -1,6 +1,6 @@
 package com.arc.zero.controller.data.test.file;
 
-import com.arc.zero.utils.IOUtils;
+import com.arc.zero.utils.io.IOUtils;
 
 import java.io.*;
 

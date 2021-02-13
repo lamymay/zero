@@ -1,4 +1,4 @@
-package com.arc.zero.controller.data.file.test;
+package com.arc.zero.utils.disk;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,12 +7,12 @@ import java.util.Locale;
 
 
 /**
- * 检查磁盘空间是否可用的线程
+ * 检查本机磁盘空间是否可用工具类
  *
  * @author yechao
  * @date 2020/12/8 2:35 下午
  */
-public class CheckDiskThread extends Thread {
+public class CheckDiskUtil extends Thread {
 
     /**
      * 获得当前操作系统的名称
@@ -34,7 +34,7 @@ public class CheckDiskThread extends Thread {
     }
 
     public static void setDiskAvail(String diskAvail) {
-        CheckDiskThread.diskAvail = diskAvail;
+        CheckDiskUtil.diskAvail = diskAvail;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.arc.zero.utils;
+package com.arc.zero.utils.other;
 
 import java.util.Random;
 import java.util.regex.Pattern;

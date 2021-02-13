@@ -1,4 +1,4 @@
-package com.arc.zero.controller.data.file.test;
+package com.arc.zero.controller.data.test.file;
 
 import lombok.val;
 

@@ -1,4 +1,4 @@
-package com.arc.zero.utils;
+package com.arc.zero.utils.file;
 
 import com.arc.core.model.domain.system.SysFile;
 import com.arc.zero.mapper.system.SysFileMapper;

@@ -1,4 +1,4 @@
-package com.arc.zero.utils;
+package com.arc.zero.utils.io;
 
 import java.io.ByteArrayOutputStream;
 import java.io.Closeable;

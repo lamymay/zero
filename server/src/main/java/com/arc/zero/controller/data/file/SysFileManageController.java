@@ -19,8 +19,8 @@ import java.util.HashMap;
  */
 @Slf4j
 @RestController
-@RequestMapping({"v2/file"})
-public class SysFileWithManageController {
+@RequestMapping({"/v2/file"})
+public class SysFileManageController {
 
     /**
      * 文件记录表相关操作的服务

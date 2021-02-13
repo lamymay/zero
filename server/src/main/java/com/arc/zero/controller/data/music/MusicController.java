@@ -1,4 +1,4 @@
-package com.arc.zero.controller.data.file;
+package com.arc.zero.controller.data.music;
 
 import com.arc.core.model.vo.ResponseVo;
 import com.arc.zero.config.properties.file.FileProperties;
@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @Slf4j
 @Controller
-@RequestMapping({"music"})
+@RequestMapping({"v1/music"})
 public class MusicController {
 
     /**

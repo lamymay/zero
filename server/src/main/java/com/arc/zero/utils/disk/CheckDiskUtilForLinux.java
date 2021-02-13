@@ -1,4 +1,4 @@
-package com.arc.zero.controller.data.file.test;
+package com.arc.zero.utils.disk;
 
 
 import java.io.BufferedReader;
@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
  * @author yechao
  * @date 2020/12/8 2:23 下午
  */
-public class Linux {
+public class CheckDiskUtilForLinux {
 
     public static Desk getDeskUsage() {
         Desk desk = new Desk();

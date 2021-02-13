@@ -6,7 +6,7 @@ import com.arc.core.model.request.system.file.SysFileRequest;
 import com.arc.utils.file.FileUtil;
 import com.arc.zero.mapper.system.SysFileMapper;
 import com.arc.zero.service.system.SysFileService;
-import com.arc.zero.utils.FileCleaner;
+import com.arc.zero.utils.file.FileCleaner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

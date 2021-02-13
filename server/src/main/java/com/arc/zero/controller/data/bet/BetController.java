@@ -24,13 +24,7 @@ public class BetController {
     // 2 夺宝记录表 奖品id-用户Id-兑换码id
     // 3 订单表 奖品id-用户id-地址等
 
-    @PostMapping("/save")
-    public ResponseEntity saveOrUpdate(@RequestBody Award award) {
-        //文件扫描后入库 返回成功的数量
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("award", award);
-        return ResponseEntity.ok(map);
-    }
+
 
     /**
      * 能量森林相关mapper

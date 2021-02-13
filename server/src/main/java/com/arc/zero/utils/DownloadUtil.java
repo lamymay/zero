@@ -2,7 +2,6 @@ package com.arc.zero.utils;
 
 import lombok.extern.slf4j.Slf4j;
 
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.time.LocalDate;
@@ -13,19 +12,13 @@ import java.time.LocalDate;
  * @author 叶超
  * @since 2019/2/25 17:07
  */
+@Deprecated
 @Slf4j
 public class DownloadUtil {
-
 
     /**
      * 文件下载相关代码
      * //     * @param fileWithPath 文件路径以及名称
-     *
-     * @param response HttpServletResponse
-     * @return
-     */
-
-    /**
      * 从本地文件系统下载文件
      *
      * @param file     本地文件系统的文件
