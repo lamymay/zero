@@ -6,8 +6,8 @@ import lombok.ToString;
 /**
  * 扫码回执信息 传输对象--实体
  *
- * @author: yechao
- * @date: 2018/5/5
+ * @author yechao
+ * @date 2018/5/5
  */
 @Data
 @ToString
@@ -22,3 +22,4 @@ public class ExcelEntity {
     private String remark;
 
 }
+
